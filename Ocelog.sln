@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog", "src\Ocelog\Ocelog.csproj", "{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Test", "tests\Ocelog.Test\Ocelog.Test.csproj", "{B624E3B4-C5AA-41AD-80A2-C486BE6F5E66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Formatting.Logstash", "src\Ocelog.Formatting.Logstash\Ocelog.Formatting.Logstash.csproj", "{970EA7F9-D1AE-4641-81C9-58679CE52F7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Formatting.Logstash.Test", "tests\Ocelog.Formatting.Logstash.Test\Ocelog.Formatting.Logstash.Test.csproj", "{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{905B33F6-43B4-4438-A03F-C6B77DB236BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F68118B9-0251-41F7-BF05-627970A20FAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Transport.UDP", "src\Ocelog.Transport.UDP\Ocelog.Transport.UDP.csproj", "{FC2D918C-9539-446F-96B3-9E8D929CBA65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Transport.UDP.Test", "tests\Ocelog.Transport.UDP.Test\Ocelog.Transport.UDP.Test.csproj", "{E47E1E65-3327-448C-B895-B514405FC65A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B624E3B4-C5AA-41AD-80A2-C486BE6F5E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B624E3B4-C5AA-41AD-80A2-C486BE6F5E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B624E3B4-C5AA-41AD-80A2-C486BE6F5E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B624E3B4-C5AA-41AD-80A2-C486BE6F5E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{970EA7F9-D1AE-4641-81C9-58679CE52F7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{970EA7F9-D1AE-4641-81C9-58679CE52F7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{970EA7F9-D1AE-4641-81C9-58679CE52F7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{970EA7F9-D1AE-4641-81C9-58679CE52F7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC2D918C-9539-446F-96B3-9E8D929CBA65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC2D918C-9539-446F-96B3-9E8D929CBA65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC2D918C-9539-446F-96B3-9E8D929CBA65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2D918C-9539-446F-96B3-9E8D929CBA65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E47E1E65-3327-448C-B895-B514405FC65A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E47E1E65-3327-448C-B895-B514405FC65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E47E1E65-3327-448C-B895-B514405FC65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E47E1E65-3327-448C-B895-B514405FC65A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769} = {905B33F6-43B4-4438-A03F-C6B77DB236BD}
+		{B624E3B4-C5AA-41AD-80A2-C486BE6F5E66} = {F68118B9-0251-41F7-BF05-627970A20FAE}
+		{970EA7F9-D1AE-4641-81C9-58679CE52F7A} = {905B33F6-43B4-4438-A03F-C6B77DB236BD}
+		{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD} = {F68118B9-0251-41F7-BF05-627970A20FAE}
+		{FC2D918C-9539-446F-96B3-9E8D929CBA65} = {905B33F6-43B4-4438-A03F-C6B77DB236BD}
+		{E47E1E65-3327-448C-B895-B514405FC65A} = {F68118B9-0251-41F7-BF05-627970A20FAE}
+	EndGlobalSection
+EndGlobal
