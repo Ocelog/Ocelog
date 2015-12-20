@@ -54,11 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallerInfo.cs" />
+    <Compile Include="ErrorHandlingObserver.cs" />
     <Compile Include="FormattedLogEvent.cs" />
     <Compile Include="InvalidLogMessageTypeException.cs" />
     <Compile Include="LogEvent.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="LogObservableExtentions.cs" />
+    <Compile Include="LogObservableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestLog.cs" />
   </ItemGroup>
