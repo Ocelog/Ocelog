@@ -95,7 +95,7 @@ namespace Ocelog.Test
         [InlineData(1)]
         [InlineData("string")]
         [InlineData(1.45)]
-        [InlineData(1l)]
+        [InlineData(1L)]
         public void should_reject_message_that_are_not_objects(object invalidMessage)
         {
             var output = new List<LogEvent>();
@@ -112,7 +112,7 @@ namespace Ocelog.Test
         [InlineData(1)]
         [InlineData("string")]
         [InlineData(1.45)]
-        [InlineData(1l)]
+        [InlineData(1L)]
         public void should_reject_additionalfields_that_are_not_objects(object invalidMessage)
         {
             var output = new List<LogEvent>();
