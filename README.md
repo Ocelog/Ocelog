@@ -2,11 +2,15 @@
 
 ## Log objects not strings
 
+Structured Logging is now becoming more and more common. Logging complex objects into a document store allows for analysis to be performed on log, so we can alert, diagnose, and track changes in behaviour much more easily than with traditional message logging.
+
+See http://engineering.laterooms.com/structured-logging-with-elk-part-1/ , http://engineering.laterooms.com/structured-logging-with-elk-part-2/ and http://engineering.laterooms.com/structured-logging-with-elk-part-3/ to understand the reasons this logging library came about.
+
 ## Adding context
 
 ### Additional Fields
 
-Extra context fields that can be used to help filtering later.
+Extra context fields that can be used to help filtering later. Every logger can have a number of additional fields added to it, to provide context to the detail being logged.
 
 ### Tags
 
