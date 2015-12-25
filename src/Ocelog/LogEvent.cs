@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,8 +14,8 @@ namespace Ocelog
 
     public class LogEvent
     {
-        private List<string> _tags = new List<string>();
-        private List<object> _fields= new List<object>();
+        private ConcurrentQueue<string> _tags = new ConcurrentQueue<string>();
+        private ConcurrentQueue<object> _fields= new ConcurrentQueue<object>();
         private object _content;
 
         public object Content
@@ -35,14 +36,14 @@ namespace Ocelog
 
         public void AddTag(string tag)
         {
-            _tags.Add(tag);
+            _tags.Enqueue(tag);
         }
 
         public void AddField(object additionalFields)
         {
             EnsureValidType(additionalFields, nameof(additionalFields));
 
-            _fields.Add(additionalFields);
+            _fields.Enqueue(additionalFields);
         }
 
         private void EnsureValidType(object value, string nameof)
