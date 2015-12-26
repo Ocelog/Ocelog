@@ -41,6 +41,15 @@ namespace Ocelog.Testing
 
         private bool DidMatch(object actualContent, object expectedContent)
         {
+            if (actualContent == null && expectedContent == null)
+                return true;
+
+            if (expectedContent == null)
+                return true;
+
+            if (actualContent == null)
+                return false;
+
             if (actualContent.GetType().IsValueType || expectedContent.GetType().IsValueType)
                 return actualContent.Equals(expectedContent);
 

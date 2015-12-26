@@ -121,5 +121,33 @@ namespace Ocelog.Testing.Test
 
             Assert.False(logSpy.DidInfo(new { Some = "Content", Extra = new { Content = "blah", Extra = true } }));
         }
+
+        [Fact]
+        public void should_allow_fields_to_be_ingored_with_null()
+        {
+            var logSpy = new LoggingSpy();
+            var content = new TestData() { Prop1 = 2, Prop2 = "to ignore" };
+
+            logSpy.Logger.Info(content);
+
+            Assert.True(logSpy.DidInfo(new TestData() { Prop1 = 2, Prop2 = null }));
+        }
+
+        [Fact]
+        public void should_not_allow_null_fields_to_match_non_null()
+        {
+            var logSpy = new LoggingSpy();
+            var content = new TestData() { Prop1 = 2, Prop2 = null };
+
+            logSpy.Logger.Info(content);
+
+            Assert.False(logSpy.DidInfo(new TestData() { Prop1 = 2, Prop2 = "Somtehing here" }));
+        }
+
+        public class TestData
+        {
+            public object Prop1 { get; set; }
+            public object Prop2 { get; set; }
+        }
     }
 }
