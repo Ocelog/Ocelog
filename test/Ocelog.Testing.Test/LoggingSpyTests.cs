@@ -144,6 +144,17 @@ namespace Ocelog.Testing.Test
             Assert.False(logSpy.DidInfo(new TestData() { Prop1 = 2, Prop2 = "Somtehing here" }));
         }
 
+        [Fact]
+        public void should_allow_exceptions_to_be_matched()
+        {
+            var logSpy = new LoggingSpy();
+            var content = new Exception("Something went wrong");
+
+            logSpy.Logger.Error(content);
+
+            Assert.True(logSpy.DidError(content));
+        }
+
         public class TestData
         {
             public object Prop1 { get; set; }
