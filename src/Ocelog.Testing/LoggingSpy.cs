@@ -21,22 +21,27 @@ namespace Ocelog.Testing
 
         public bool DidInfo(object content)
         {
-            return _logEvents.Any(item => DidMatch(item.Content, content) && item.Level == LogLevel.Info);
+            return DidLog(LogLevel.Info, content);
         }
 
         public bool DidWarn(object content)
         {
-            return _logEvents.Any(item => DidMatch(item.Content, content) && item.Level == LogLevel.Warn);
+            return DidLog(LogLevel.Warn, content);
         }
 
         public bool DidError(object content)
         {
-            return _logEvents.Any(item => DidMatch(item.Content, content) && item.Level == LogLevel.Error);
+            return DidLog(LogLevel.Error, content);
         }
 
         private void RecordLog(LogEvent logEvent)
         {
             _logEvents.Add(logEvent);
+        }
+
+        public bool DidLog(LogLevel logLevel, object content)
+        {
+            return _logEvents.Any(item => item.Level == logLevel && DidMatch(item.Content, content));
         }
 
         private bool DidMatch(object actualContent, object expectedContent)
@@ -47,13 +52,13 @@ namespace Ocelog.Testing
             if (expectedContent == null)
                 return true;
 
+            if (IsMatchingPredicate(expectedContent, actualContent))
+                return InvokePredicate(expectedContent, actualContent);
+
             if (actualContent == null)
                 return false;
 
-            if (actualContent.GetType().IsValueType || expectedContent.GetType().IsValueType)
-                return actualContent.Equals(expectedContent);
-
-            if (actualContent.GetType() == typeof(string) || expectedContent.GetType() == typeof(string))
+            if (IsComparableWithEquals(expectedContent, actualContent))
                 return actualContent.Equals(expectedContent);
 
             var expectedProperties = GetValueProperties(expectedContent);
@@ -66,6 +71,35 @@ namespace Ocelog.Testing
                 return false;
 
             return matchingProperties.All(match => DidMatch(match.left.GetValue(actualContent), match.right.GetValue(expectedContent)));
+        }
+
+        private bool InvokePredicate(object expectedContent, object actualContent)
+        {
+            return (bool)expectedContent
+                .GetType()
+                .GetMethod("DynamicInvoke")
+                .Invoke(expectedContent, new[] { new[] { actualContent } });
+        }
+
+        private bool IsComparableWithEquals(object expectedContent, object actualContent)
+        {
+            return actualContent.GetType().IsValueType
+                || expectedContent.GetType().IsValueType
+                || actualContent.GetType() == typeof(string)
+                || expectedContent.GetType() == typeof(string);
+        }
+
+        private bool IsMatchingPredicate(object expectedContent, object actualContent)
+        {
+            return expectedContent.GetType().IsGenericType
+                   && expectedContent.GetType().GetGenericTypeDefinition() == typeof(Predicate<>)
+                   && expectedContent.GetType().GetGenericArguments().Length == 1
+                   && expectedContent.GetType().GetGenericArguments()[0] == GetPredicateTypeParam(actualContent);
+        }
+
+        private Type GetPredicateTypeParam(object actualContent)
+        {
+            return (actualContent == null ? typeof(object) : actualContent.GetType());
         }
 
         private IEnumerable<PropertyInfo> GetValueProperties(object content)

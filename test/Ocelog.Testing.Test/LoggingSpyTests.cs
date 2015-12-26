@@ -155,6 +155,35 @@ namespace Ocelog.Testing.Test
             Assert.True(logSpy.DidError(content));
         }
 
+        [Theory]
+        [InlineData(12)]
+        [InlineData("Hi")]
+        [InlineData(null)]
+        public void should_allow_predicates_to_be_matched<T>(T val)
+        {
+            var logSpy = new LoggingSpy();
+            var content = new { Something = val };
+
+            logSpy.Logger.Info(content);
+
+            Assert.True(logSpy.DidInfo(new { Something = new Predicate<T>(n => n == null ? val == null : n.Equals(val)) }));
+        }
+
+        [Theory]
+        [InlineData(12)]
+        [InlineData("Hi")]
+        [InlineData(null)]
+        public void should_allow_predicates_to_be_mismatched<T>(T val)
+        {
+            var logSpy = new LoggingSpy();
+            var content = new { Something = val };
+
+            logSpy.Logger.Info(content);
+
+            Assert.False(logSpy.DidInfo(new { Something = new Predicate<string>(n => n == null ? val != null : !n.Equals(val)) }));
+        }
+        
+
         public class TestData
         {
             public object Prop1 { get; set; }
