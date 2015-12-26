@@ -58,6 +58,9 @@ namespace Ocelog.Testing
             if (actualContent == null)
                 return false;
 
+            if (object.ReferenceEquals(expectedContent, actualContent))
+                return true;
+
             if (IsComparableWithEquals(expectedContent, actualContent))
                 return actualContent.Equals(expectedContent);
 
