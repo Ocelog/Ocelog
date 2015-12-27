@@ -17,7 +17,7 @@ namespace Ocelog.Formatting.Logstash
                 { "@timestamp", logEvent.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) }
             };
 
-            var jsonSerializer = new JsonSerializer() { };
+            var jsonSerializer = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore };
             jsonSerializer.Converters.Add(new StringEnumConverter() { AllowIntegerValues = false });
 
             var json = JObject.FromObject(requiredFields, jsonSerializer);

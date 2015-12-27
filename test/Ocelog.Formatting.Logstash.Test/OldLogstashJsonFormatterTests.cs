@@ -239,6 +239,23 @@ namespace Ocelog.Formatting.Logstash.Test
             Assert.Equal("There", parsed.Value<JObject>("@fields").Value<string>("Thing"));
         }
 
+        [Fact]
+        public void should_ingore_null_fields()
+        {
+            var output = new List<FormattedLogEvent>();
+
+            Logger logger = new Logger(logEvents => logEvents
+                .Select(OldLogstashJson.Format)
+                .Subscribe(log => output.Add(log))
+                );
+
+            logger.Info(new { Thing = (string)null });
+
+            JObject parsed = GetJObject(output);
+
+            Assert.Null(parsed.Value<JObject>("@fields").GetValue("Thing"));
+        }
+
         private static JObject GetJObject(List<FormattedLogEvent> output)
         {
             var logOutput = output.First().Content;

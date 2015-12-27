@@ -229,7 +229,6 @@ namespace Ocelog.Formatting.Logstash.Test
                 .Select(LogstashJson.Format)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Info(new { Things = new Dictionary<string, int> { { "D", 4 } } });
 
@@ -248,13 +247,29 @@ namespace Ocelog.Formatting.Logstash.Test
                 .Select(LogstashJson.Format)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Info(new { Thing = "There" });
 
             JObject parsed = GetJObject(output);
 
             Assert.Equal("There", parsed.Value<string>("Thing"));
+        }
+
+        [Fact]
+        public void should_ingore_null_fields()
+        {
+            var output = new List<FormattedLogEvent>();
+
+            Logger logger = new Logger(logEvents => logEvents
+                .Select(LogstashJson.Format)
+                .Subscribe(log => output.Add(log))
+                );
+
+            logger.Info(new { Thing = (string)null });
+
+            JObject parsed = GetJObject(output);
+
+            Assert.Null(parsed.GetValue("Thing"));
         }
 
         private static JObject GetJObject(List<FormattedLogEvent> output)

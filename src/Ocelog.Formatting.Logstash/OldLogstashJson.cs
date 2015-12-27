@@ -11,7 +11,7 @@ namespace Ocelog.Formatting.Logstash
     {
         public static FormattedLogEvent Format(LogEvent logEvent)
         {
-            var jsonSerializer = new JsonSerializer() { };
+            var jsonSerializer = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore };
             jsonSerializer.Converters.Add(new StringEnumConverter() { AllowIntegerValues = false });
 
             var json = new JObject();
