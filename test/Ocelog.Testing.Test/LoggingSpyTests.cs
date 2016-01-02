@@ -123,7 +123,7 @@ namespace Ocelog.Testing.Test
         }
 
         [Fact]
-        public void should_allow_fields_to_be_ingored_with_null()
+        public void should_allow_fields_to_be_ignored_with_null()
         {
             var logSpy = new LoggingSpy();
             var content = new TestData() { Prop1 = 2, Prop2 = "to ignore" };
@@ -141,7 +141,7 @@ namespace Ocelog.Testing.Test
 
             logSpy.Logger.Info(content);
 
-            Assert.False(logSpy.DidInfo(new TestData() { Prop1 = 2, Prop2 = "Somtehing here" }));
+            Assert.False(logSpy.DidInfo(new TestData() { Prop1 = 2, Prop2 = "Something here" }));
         }
 
         [Fact]

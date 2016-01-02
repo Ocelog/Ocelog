@@ -34,36 +34,67 @@ namespace Ocelog.Testing
             return DidLog(LogLevel.Error, content);
         }
 
+        public void AssertDidInfo(object content)
+        {
+            AssertDidLog(LogLevel.Info, content);
+        }
+
+        public void AssertDidWarn(object content)
+        {
+            AssertDidLog(LogLevel.Warn, content);
+        }
+
+        public void AssertDidError(object content)
+        {
+            AssertDidLog(LogLevel.Error, content);
+        }
+
+        private bool DidLog(LogLevel logLevel, object content)
+        {
+            return _logEvents.Any(item => item.Level == logLevel && DidMatch(item.Content, content, "").Item1);
+        }
+
+        private void AssertDidLog(LogLevel logLevel, object content)
+        {
+            var matches = _logEvents
+                .Where(item => item.Level == logLevel)
+                .Select(item => DidMatch(item.Content, content, "log"));
+
+            if (!matches.Any(match => match.Item1))
+                throw new LoggingAssertionFailed(string.Join("\n", matches.Where(match => !match.Item1).Select(match => match.Item2)));
+        }
+
         private void RecordLog(LogEvent logEvent)
         {
             _logEvents.Add(logEvent);
         }
 
-        public bool DidLog(LogLevel logLevel, object content)
-        {
-            return _logEvents.Any(item => item.Level == logLevel && DidMatch(item.Content, content));
-        }
-
-        private bool DidMatch(object actualContent, object expectedContent)
+        private Tuple<bool, string> DidMatch(object actualContent, object expectedContent, string path)
         {
             if (actualContent == null && expectedContent == null)
-                return true;
+                return Pass();
 
             if (expectedContent == null)
-                return true;
+                return Pass();
 
             if (IsMatchingPredicate(expectedContent, actualContent))
-                return InvokePredicate(expectedContent, actualContent);
+                return InvokePredicate(expectedContent, actualContent, path);
 
             if (actualContent == null)
-                return false;
+                return Fail($"Missing field ({path})");
 
             if (object.ReferenceEquals(expectedContent, actualContent))
-                return true;
+                return Pass();
 
             if (IsComparableWithEquals(expectedContent, actualContent))
-                return actualContent.Equals(expectedContent);
+                return actualContent.Equals(expectedContent) ? Pass() : Fail($"Not equal ({path}) Expected: {expectedContent} but got {actualContent}");
 
+            return DidPropertiesMatch(actualContent, expectedContent, path);
+
+        }
+
+        private Tuple<bool, string> DidPropertiesMatch(object actualContent, object expectedContent, string path)
+        { 
             var expectedProperties = GetValueProperties(expectedContent);
             var actualProperties = GetValueProperties(actualContent);
 
@@ -71,17 +102,43 @@ namespace Ocelog.Testing
                 .Join(expectedProperties, left => left.Name, right => right.Name, (left, right) => new { left, right });
 
             if (matchingProperties.Count() != expectedProperties.Count())
-                return false;
+                return Fail($"Missing fields ({GetFieldNames(expectedProperties, path)})");
 
-            return matchingProperties.All(match => DidMatch(match.left.GetValue(actualContent), match.right.GetValue(expectedContent)));
+            var notMatching = matchingProperties
+                .Select(match => DidMatch(match.left.GetValue(actualContent), match.right.GetValue(expectedContent), path + "." + match.right.Name))
+                .FirstOrDefault(match => !match.Item1);
+
+            return notMatching ?? Pass();
         }
 
-        private bool InvokePredicate(object expectedContent, object actualContent)
+        private Tuple<bool, string> Pass()
         {
-            return (bool)expectedContent
+            return new Tuple<bool, string>(true, "");
+        }
+
+        private Tuple<bool, string> Fail(string reason)
+        {
+            return new Tuple<bool, string>(false, reason);
+        }
+
+        private string GetFieldNames(IEnumerable<PropertyInfo> properties, string path)
+        {
+            return string.Join(", ", properties.Select(prop => path + "." + prop.Name));
+        }
+
+        private Tuple<bool, string> InvokePredicate(object expectedContent, object actualContent, string path)
+        {
+            if ((bool)expectedContent
                 .GetType()
                 .GetMethod("DynamicInvoke")
-                .Invoke(expectedContent, new[] { new[] { actualContent } });
+                .Invoke(expectedContent, new[] { new[] { actualContent } }))
+            {
+                return Pass();
+            }
+            else
+            {
+                return Fail($"Predicate did not match field ({path})");
+            };
         }
 
         private bool IsComparableWithEquals(object expectedContent, object actualContent)
