@@ -197,5 +197,42 @@ namespace Ocelog.Testing.Test
                 }
             });
         }
+
+        [Fact]
+        public void should_show_deep_path_of_fields_when_comparing_to_dictionary()
+        {
+            var logSpy = new LoggingSpy();
+            var content = new { Some = new { Deep = new { } } };
+
+            logSpy.Logger.Info(content);
+
+            Assert.Throws<LoggingAssertionFailed>(() =>
+            {
+                try
+                {
+                    logSpy.AssertDidInfo(ObjectMerging.ToDictionary( new { Some = new { Deep = new { Field = "Field" } } }));
+                }
+                catch (LoggingAssertionFailed exception)
+                {
+                    Assert.Contains("Some.Deep.Field", exception.Message);
+                    throw;
+                }
+            });
+        }
+
+        [Fact]
+        public void should_allow_asserting_on_request_log()
+        {
+
+            var logSpy = new LoggingSpy();
+            var requestLog = logSpy.Logger.StartRequestLog();
+            var expectedContent = new { Some = "Content" };
+
+            requestLog.Add(expectedContent);
+
+            requestLog.Complete();
+
+            logSpy.AssertDidInfo(expectedContent);
+        }
     }
 }

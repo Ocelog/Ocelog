@@ -13,7 +13,9 @@ namespace Ocelog
             if (!allFields.Any())
                 return new Dictionary<string, object>();
 
-            return (Dictionary<string, object>)allFields.Aggregate((first, second) => Merge(second, first));
+            return (Dictionary<string, object>)allFields
+                .Select(ToDictionary)
+                .Aggregate((first, second) => Merge(second, first));
         }
 
         private static Dictionary<string, object> Merge(Dictionary<string, object> doc1, Dictionary<string, object> doc2)
@@ -43,7 +45,7 @@ namespace Ocelog
             return Merge(ToDictionary(doc1), ToDictionary(doc2));
         }
 
-        private static Dictionary<string, object> ToDictionary(object fields)
+        public static Dictionary<string, object> ToDictionary(object fields)
         {
             var type = fields.GetType();
             if (type.IsGenericType
@@ -83,6 +85,9 @@ namespace Ocelog
             if (typeof(IEnumerable<object>).IsAssignableFrom(fields.GetType()))
                 return ToList((IEnumerable<object>)fields);
 
+            if (IsPredicate(fields))
+                return fields;
+
             return ToDictionary(fields);
         }
 
@@ -93,9 +98,20 @@ namespace Ocelog
 
         private static bool IsSimpleType(object fields)
         {
-            return fields.GetType().IsValueType
-                || fields.GetType() == typeof(string)
-                || fields.GetType().IsEnum;
+            var type = fields.GetType();
+
+            return type.IsValueType
+                || type == typeof(string)
+                || type.IsEnum;
+        }
+        
+        private static bool IsPredicate(object content)
+        {
+            var type = content.GetType();
+
+            return type.IsGenericType
+                   && type.GetGenericTypeDefinition() == typeof(Predicate<>)
+                   && type.GetGenericArguments().Length == 1;
         }
     }
 }

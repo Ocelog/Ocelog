@@ -121,7 +121,7 @@ namespace Ocelog.Testing
             return new Tuple<bool, string>(false, reason);
         }
 
-        private string GetFieldNames(IEnumerable<PropertyInfo> properties, string path)
+        private string GetFieldNames(IEnumerable<Property> properties, string path)
         {
             return string.Join(", ", properties.Select(prop => path + "." + prop.Name));
         }
@@ -162,11 +162,25 @@ namespace Ocelog.Testing
             return (actualContent == null ? typeof(object) : actualContent.GetType());
         }
 
-        private IEnumerable<PropertyInfo> GetValueProperties(object content)
+        private IEnumerable<Property> GetValueProperties(object content)
         {
+            if (content is Dictionary<string, object>)
+            {
+                var dictionary = (Dictionary<string, object>)content;
+                return dictionary
+                    .Select(pair => new Property() { Name = pair.Key, GetValue = (o => ((Dictionary<string, object>)o)[pair.Key]) });
+            }
+
             return content.GetType().GetProperties()
                 .Where(prop => prop.CanRead
-                    && prop.GetAccessors().Any(access => access.ReturnType != typeof(void) && access.GetParameters().Length == 0));
+                    && prop.GetAccessors().Any(access => access.ReturnType != typeof(void) && access.GetParameters().Length == 0))
+                .Select(prop => new Property() { Name = prop.Name, GetValue = prop.GetValue });
+        }
+
+        private class Property
+        {
+            public string Name;
+            public Func<object, object> GetValue;
         }
     }
 }
