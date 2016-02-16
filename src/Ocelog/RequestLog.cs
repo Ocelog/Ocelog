@@ -10,26 +10,26 @@ namespace Ocelog
 {
     public class RequestLog
     {
-        private LogEvent _logEvent;
+        private List<object> _fields = new List<object>();
         private Subject<LogEvent> _logEvents;
         
         internal RequestLog(Subject<LogEvent> _logEvents)
         {
             this._logEvents = _logEvents;
-            _logEvent = new LogEvent() { Level = LogLevel.Info };
         }
 
         public void Add(object newFields)
         {
-            _logEvent.AddField(newFields);
+            _fields.Add(newFields);
         }
 
         public void Complete([CallerFilePath] string callerFilePath = "", [CallerLineNumber]int callerLineNumber = 0)
         {
-            _logEvent.CallerInfo = new CallerInfo() { FilePath = callerFilePath, LineNum = callerLineNumber };
-            _logEvent.Content = new { };
+            var logEvent = new LogEvent() { Level = LogLevel.Info };
+            logEvent.CallerInfo = new CallerInfo() { FilePath = callerFilePath, LineNum = callerLineNumber };
+            logEvent.Content = ObjectMerging.Flatten(_fields);
 
-            _logEvents.OnNext(_logEvent);
+            _logEvents.OnNext(logEvent);
         }
     }
 }

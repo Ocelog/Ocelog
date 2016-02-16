@@ -25,10 +25,11 @@ namespace Ocelog.Test
             requestLog.Add(new { Name = "Some name" });
             requestLog.Complete();
 
-            Assert.Collection(output,
-                log => Assert.Collection(log.AdditionalFields,
-                    field => Assert.Equal(new { Val = 1 }, field),
-                    field => Assert.Equal(new { Name = "Some name" }, field)));
+            Assert.Equal(new Dictionary<string, object>()
+            {
+                { "Val", 1},
+                { "Name", "Some name"}
+            }, output[0].Content);
         }
 
         [Fact]

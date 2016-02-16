@@ -10,6 +10,9 @@ namespace Ocelog
     {
         public static Dictionary<string, object> Flatten(IEnumerable<object> allFields)
         {
+            if (!allFields.Any())
+                return new Dictionary<string, object>();
+
             return (Dictionary<string, object>)allFields.Aggregate((first, second) => Merge(second, first));
         }
 
