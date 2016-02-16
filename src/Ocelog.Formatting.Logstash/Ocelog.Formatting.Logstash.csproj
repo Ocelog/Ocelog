@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonFormatter.cs" />
     <Compile Include="LogstashExtensions.cs" />
     <Compile Include="OldLogstashJson.cs" />
     <Compile Include="LogstashJson.cs" />

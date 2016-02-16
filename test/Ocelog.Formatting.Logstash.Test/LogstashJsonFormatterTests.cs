@@ -18,7 +18,8 @@ namespace Ocelog.Formatting.Logstash.Test
             var output = new List<FormattedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -39,7 +40,8 @@ namespace Ocelog.Formatting.Logstash.Test
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddTimestamp(timestamp)
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -58,7 +60,8 @@ namespace Ocelog.Formatting.Logstash.Test
             var output = new List<FormattedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -80,7 +83,8 @@ namespace Ocelog.Formatting.Logstash.Test
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { MyField = 34 })
                 .AddFields(new { OtherField = "Hello" })
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -103,7 +107,8 @@ namespace Ocelog.Formatting.Logstash.Test
                 .AddTag("mytag")
                 .AddTag("mytag2")
                 .AddTagsToAdditionalFields()
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -123,7 +128,8 @@ namespace Ocelog.Formatting.Logstash.Test
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddCallerInfoToAdditionalFields()
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
             var callerFilePath = GetCallerFilePath();
@@ -144,7 +150,8 @@ namespace Ocelog.Formatting.Logstash.Test
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddLevelToAdditionalFields()
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
             var callerFilePath = GetCallerFilePath();
@@ -166,7 +173,8 @@ namespace Ocelog.Formatting.Logstash.Test
             Logger logger = new Logger(logEvents => logEvents
                 .AddLevelToTags()
                 .AddTagsToAdditionalFields()
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
             var callerFilePath = GetCallerFilePath();
@@ -186,7 +194,8 @@ namespace Ocelog.Formatting.Logstash.Test
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Things = new[] { "A", "B" } })
                 .AddFields(new { Things = new[] { "C" } })
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
             var callerFilePath = GetCallerFilePath();
@@ -206,7 +215,8 @@ namespace Ocelog.Formatting.Logstash.Test
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Things = new { A = 1, B = 2 } })
                 .AddFields(new { Things = new { C = 3 } })
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
             var callerFilePath = GetCallerFilePath();
@@ -226,7 +236,8 @@ namespace Ocelog.Formatting.Logstash.Test
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Things = new Dictionary<string, int> { { "A", 1 }, { "B", 2 } } })
                 .AddFields(new { Things = new Dictionary<string, int> { { "C", 3 } } })
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -244,7 +255,8 @@ namespace Ocelog.Formatting.Logstash.Test
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Thing = "Hello" })
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 
@@ -261,7 +273,8 @@ namespace Ocelog.Formatting.Logstash.Test
             var output = new List<FormattedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
-                .Select(LogstashJson.Format)
+                .Select(LogstashJson.Process)
+                .Select(JsonFormatter.Format)
                 .Subscribe(log => output.Add(log))
                 );
 

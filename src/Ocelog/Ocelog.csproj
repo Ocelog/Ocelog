@@ -60,6 +60,7 @@
     <Compile Include="LogEvent.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LogObservableExtensions.cs" />
+    <Compile Include="ProcessedLogEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestLog.cs" />
   </ItemGroup>

@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,16 +7,13 @@ namespace Ocelog.Formatting.Logstash
 {
     public static class LogstashJson
     {
-        public static FormattedLogEvent Format(LogEvent logEvent)
+        public static ProcessedLogEvent Process(LogEvent logEvent)
         {
             var requiredFields = new Dictionary<string, object>()
             {
                 { "@version", 1 },
                 { "@timestamp", logEvent.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) }
             };
-
-            var jsonSerializer = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore };
-            jsonSerializer.Converters.Add(new StringEnumConverter() { AllowIntegerValues = false });
 
             var document = ToDictionary(requiredFields);
 
@@ -30,9 +24,7 @@ namespace Ocelog.Formatting.Logstash
 
             document = Merge(ToDictionary(logEvent.Content), document);
 
-            var json = JObject.FromObject(document, jsonSerializer);
-
-            return new FormattedLogEvent() { Content = JsonConvert.SerializeObject(json) };
+            return new ProcessedLogEvent() { Content = document };
         }
 
         private static Dictionary<string, object> Merge(Dictionary<string, object> doc1, Dictionary<string, object> doc2)
