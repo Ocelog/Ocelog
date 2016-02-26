@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ocelog
 {
-    public class RequestLog
+    public class RequestLog : IDisposable
     {
         private List<object> _fields = new List<object>();
         private Subject<LogEvent> _logEvents;
@@ -30,6 +30,11 @@ namespace Ocelog
             logEvent.Content = ObjectMerging.Flatten(_fields);
 
             _logEvents.OnNext(logEvent);
+        }
+
+        public void Dispose()
+        {
+            Complete();
         }
     }
 }

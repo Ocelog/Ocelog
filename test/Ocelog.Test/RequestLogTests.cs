@@ -67,7 +67,30 @@ namespace Ocelog.Test
             Assert.Collection(output,
                 log => Assert.Equal(callerFilePath, log.CallerInfo.FilePath));
         }
-        
+
+        [Fact]
+        public void should_log_on_dispose()
+        {
+            var output = new List<LogEvent>();
+
+            var logger = new Logger(logEvents => logEvents
+                .Subscribe(log => output.Add(log))
+                );
+
+            using (var requestLog = logger.StartRequestLog())
+            {
+
+                requestLog.Add(new { Val = 1 });
+                requestLog.Add(new { Name = "Some name" });
+            }
+
+            Assert.Equal(new Dictionary<string, object>()
+            {
+                { "Val", 1},
+                { "Name", "Some name"}
+            }, output[0].Content);
+        }
+
         private string GetCallerFilePath([CallerFilePath]string callerFilePath = "Shouldn't Get This")
         {
             return callerFilePath;
