@@ -29,7 +29,7 @@ namespace Ocelog
                 {
                     val = Merge(mergedDictionary[key], val);
                 }
-                mergedDictionary[key] = ToDictionaryOrObject(val);
+                mergedDictionary[key] = ToDictionaryOrObject(val, new object[] { });
             }
             return mergedDictionary;
         }
@@ -47,6 +47,14 @@ namespace Ocelog
 
         public static Dictionary<string, object> ToDictionary(object fields)
         {
+            return ToDictionary(fields, new object [] { });
+        }
+
+        public static Dictionary<string, object> ToDictionary(object fields, object[] stack)
+        {
+            if (stack.Contains(fields))
+                return new Dictionary<string, object>() { { "OcelogWarning", "Found a Circular Reference" } };
+
             var type = fields.GetType();
             if (type.IsGenericType
                 && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)
@@ -57,7 +65,7 @@ namespace Ocelog
                 .Where(prop => prop.CanRead
                     && prop.GetAccessors().Any(access => access.ReturnType != typeof(void) && access.GetParameters().Length == 0))
                 .Where(prop => prop.GetValue(fields) != null)
-                .ToDictionary(prop => prop.Name, prop => ToDictionaryOrObject(prop.GetValue(fields)));
+                .ToDictionary(prop => prop.Name, prop => ToDictionaryOrObject(prop.GetValue(fields), stack.Push(fields)));
         }
 
         private static Dictionary<string, object> BoxDictionaryValues(Type valueType, object fields)
@@ -74,26 +82,26 @@ namespace Ocelog
             return dictionary.ToDictionary<KeyValuePair<string, T>, string, object>(pair => pair.Key, pair => pair.Value);
         }
 
-        private static object ToDictionaryOrObject(object fields)
+        private static object ToDictionaryOrObject(object fields, object[] stack)
         {
             if (IsSimpleType(fields))
                 return fields;
 
             if (fields.GetType().IsArray)
-                return ToList((object[])fields);
+                return ToList((object[])fields, stack);
 
             if (typeof(IEnumerable<object>).IsAssignableFrom(fields.GetType()))
-                return ToList((IEnumerable<object>)fields);
+                return ToList((IEnumerable<object>)fields, stack);
 
             if (IsPredicate(fields))
                 return fields;
 
-            return ToDictionary(fields);
+            return ToDictionary(fields, stack);
         }
 
-        private static object ToList(IEnumerable<object> fields)
+        private static object ToList(IEnumerable<object> fields, object[] stack)
         {
-            return fields.Select(ToDictionaryOrObject);
+            return fields.Select(val => ToDictionaryOrObject(val, stack));
         }
 
         private static bool IsSimpleType(object fields)
@@ -112,6 +120,11 @@ namespace Ocelog
             return type.IsGenericType
                    && type.GetGenericTypeDefinition() == typeof(Predicate<>)
                    && type.GetGenericArguments().Length == 1;
+        }
+        
+        private static object[] Push(this object [] @this, object toPush)
+        {
+            return @this.Concat(new object[] { toPush }.AsEnumerable()).ToArray();
         }
     }
 }
