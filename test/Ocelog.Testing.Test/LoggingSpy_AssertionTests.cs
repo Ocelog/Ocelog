@@ -72,7 +72,7 @@ namespace Ocelog.Testing.Test
             var logSpy = new LoggingSpy();
             var content = new { Some = "Thing" };
 
-            logSpy.Logger.Info(new { Other = "Content"});
+            logSpy.Logger.Info(new { Other = "Content" });
             logSpy.Logger.Info(content);
 
             logSpy.AssertDidInfo(new { Some = "Thing" });
@@ -180,8 +180,8 @@ namespace Ocelog.Testing.Test
         public void should_show_deep_path_of_fields()
         {
             var logSpy = new LoggingSpy();
-            var content = new { Some = new { Deep = new {  } } };
-            
+            var content = new { Some = new { Deep = new { } } };
+
             logSpy.Logger.Info(content);
 
             Assert.Throws<LoggingAssertionFailed>(() =>
@@ -210,7 +210,7 @@ namespace Ocelog.Testing.Test
             {
                 try
                 {
-                    logSpy.AssertDidInfo(ObjectMerging.ToDictionary( new { Some = new { Deep = new { Field = "Field" } } }));
+                    logSpy.AssertDidInfo(ObjectMerging.ToDictionary(new { Some = new { Deep = new { Field = "Field" } } }));
                 }
                 catch (LoggingAssertionFailed exception)
                 {

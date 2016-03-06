@@ -37,5 +37,15 @@ namespace Ocelog
 
             return wrappedLogEvents;
         }
+
+        public static IObservable<ProcessedLogEvent> Process(this IObservable<LogEvent> logEvents, Func<LogEvent, ProcessedLogEvent> func)
+        {
+            return logEvents.Select(func);
+        }
+
+        public static IObservable<FormattedLogEvent> Format(this IObservable<ProcessedLogEvent> logEvents, Func<ProcessedLogEvent, FormattedLogEvent> func)
+        {
+            return logEvents.Select(func);
+        }
     }
 }

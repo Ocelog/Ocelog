@@ -182,7 +182,7 @@ namespace Ocelog.Testing.Test
 
             Assert.False(logSpy.DidInfo(new { Something = new Predicate<string>(n => n == null ? val != null : !n.Equals(val)) }));
         }
-        
+
 
         public class TestData
         {
