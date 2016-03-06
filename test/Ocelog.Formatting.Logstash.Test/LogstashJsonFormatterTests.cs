@@ -27,10 +27,11 @@ namespace Ocelog.Formatting.Logstash.Test
             Assert.Equal(1, parsed["@version"]);
         }
 
-        [Fact]
-        public void should_add_timestamp_in_correct_format()
+        [Theory]
+        [InlineData("2015-06-07T18:05:22.352Z")]
+        [InlineData("2015-12-07T18:05:22.352Z")]
+        public void should_add_timestamp_in_correct_format(string expectedTimestamp)
         {
-            string expectedTimestamp = "2015-12-07T18:05:22.352Z";
             var timestamp = DateTime.Parse(expectedTimestamp, CultureInfo.InvariantCulture);
 
             var output = new List<ProcessedLogEvent>();
@@ -254,7 +255,7 @@ namespace Ocelog.Formatting.Logstash.Test
         }
 
         [Fact]
-        public void should_ingore_null_fields()
+        public void should_ignore_null_fields()
         {
             var output = new List<ProcessedLogEvent>();
 
