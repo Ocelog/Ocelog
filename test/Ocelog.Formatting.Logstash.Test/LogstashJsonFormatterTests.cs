@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Xunit;
 using System.Reactive.Linq;
-using Newtonsoft.Json.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Ocelog.Formatting.Logstash.Test
@@ -195,7 +193,7 @@ namespace Ocelog.Formatting.Logstash.Test
 
             var parsed = output[0].Content;
 
-            Assert.Equal(new object [] { "A", "B", "C", "D" }, GetArray(parsed, "Things"));
+            Assert.Equal(new object[] { "A", "B", "C", "D" }, GetArray(parsed, "Things"));
         }
 
         [Fact]
@@ -280,14 +278,6 @@ namespace Ocelog.Formatting.Logstash.Test
         private object[] GetArray(Dictionary<string, object> parsed, string v)
         {
             return ((IEnumerable<object>)parsed[v]).ToArray();
-        }
-
-        private static JObject GetJObject(List<FormattedLogEvent> output)
-        {
-            var logOutput = output.First().Content;
-
-            var parsed = (JObject)JsonConvert.DeserializeObject(logOutput, new JsonSerializerSettings() { DateParseHandling = DateParseHandling.None });
-            return parsed;
         }
 
         private string GetCallerFilePath([CallerFilePath]string callerFilePath = "Shouldn't Get This")

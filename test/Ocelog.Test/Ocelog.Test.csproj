@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TrimTests.cs" />
     <Compile Include="FilteringTests.cs" />
     <Compile Include="ExceptionHandlingTests.cs" />
     <Compile Include="LoggerTests.cs" />

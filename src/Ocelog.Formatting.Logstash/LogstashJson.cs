@@ -21,6 +21,5 @@ namespace Ocelog.Formatting.Logstash
 
             return new ProcessedLogEvent() { Content = ObjectMerging.Flatten(allFields) };
         }
-
     }
 }

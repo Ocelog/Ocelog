@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Testing", "src\Ocelo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Testing.Test", "test\Ocelog.Testing.Test\Ocelog.Testing.Test.csproj", "{B0DB94C0-03C7-433A-8BFF-A135175B2746}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Formatting.Json", "src\Ocelog.Formatting.Json\Ocelog.Formatting.Json.csproj", "{652D0DE3-7EFC-4F08-9953-CE941F2A3D54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{B0DB94C0-03C7-433A-8BFF-A135175B2746}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0DB94C0-03C7-433A-8BFF-A135175B2746}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0DB94C0-03C7-433A-8BFF-A135175B2746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{652D0DE3-7EFC-4F08-9953-CE941F2A3D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{652D0DE3-7EFC-4F08-9953-CE941F2A3D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{652D0DE3-7EFC-4F08-9953-CE941F2A3D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{652D0DE3-7EFC-4F08-9953-CE941F2A3D54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,5 +80,6 @@ Global
 		{E47E1E65-3327-448C-B895-B514405FC65A} = {F68118B9-0251-41F7-BF05-627970A20FAE}
 		{8E7BDEE4-0D41-4074-A7BB-58108B718EDC} = {905B33F6-43B4-4438-A03F-C6B77DB236BD}
 		{B0DB94C0-03C7-433A-8BFF-A135175B2746} = {F68118B9-0251-41F7-BF05-627970A20FAE}
+		{652D0DE3-7EFC-4F08-9953-CE941F2A3D54} = {905B33F6-43B4-4438-A03F-C6B77DB236BD}
 	EndGlobalSection
 EndGlobal

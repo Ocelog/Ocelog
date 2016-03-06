@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Xunit;
 using System.Reactive.Linq;
-using Newtonsoft.Json.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Ocelog.Formatting.Logstash.Test
@@ -18,19 +16,19 @@ namespace Ocelog.Formatting.Logstash.Test
             string expectedTimestamp = "2015-12-07T18:05:22.352Z";
             var timestamp = DateTime.Parse(expectedTimestamp, CultureInfo.InvariantCulture);
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddTimestamp(timestamp)
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
 
             logger.Info(new { Val = 1 });
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(expectedTimestamp, parsed.Value<string>("@timestamp"));
+            Assert.Equal(expectedTimestamp, parsed["@timestamp"]);
         }
 
         [Fact]
@@ -38,19 +36,19 @@ namespace Ocelog.Formatting.Logstash.Test
         {
             var message = new { Val = 1, Complex = new { Other = "string" } };
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
 
             logger.Info(message);
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(1, parsed.Value<JObject>("@fields").Value<int>("Val"));
-            Assert.Equal("string", parsed.Value<JObject>("@fields").Value<JObject>("Complex").Value<string>("Other"));
+            Assert.Equal(1, GetObject(parsed, "@fields")["Val"]);
+            Assert.Equal("string", GetObject(GetObject(parsed, "@fields"), "Complex")["Other"]);
         }
 
         [Fact]
@@ -58,21 +56,21 @@ namespace Ocelog.Formatting.Logstash.Test
         {
             var message = new { Val = 1 };
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { MyField = 34 })
                 .AddFields(new { OtherField = "Hello" })
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
 
             logger.Info(message);
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(34, parsed.Value<JObject>("@fields").Value<int>("MyField"));
-            Assert.Equal("Hello", parsed.Value<JObject>("@fields").Value<string>("OtherField"));
+            Assert.Equal(34, GetObject(parsed, "@fields")["MyField"]);
+            Assert.Equal("Hello", GetObject(parsed, "@fields")["OtherField"]);
         }
 
         [Fact]
@@ -80,20 +78,20 @@ namespace Ocelog.Formatting.Logstash.Test
         {
             var message = new { Val = 1 };
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddTag("mytag")
                 .AddTag("mytag2")
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
 
             logger.Info(message);
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(new[] { "mytag", "mytag2" }, parsed.Value<JArray>("@tags").ToObject<string[]>());
+            Assert.Equal(new object[] { "mytag", "mytag2" }, GetArray(parsed, "@tags"));
         }
 
         [Fact]
@@ -101,20 +99,20 @@ namespace Ocelog.Formatting.Logstash.Test
         {
             var message = new { Val = 1 };
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddCallerInfoToAdditionalFields()
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
             var callerFilePath = GetCallerFilePath();
 
             logger.Info(message);
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(callerFilePath, parsed.Value<JObject>("@fields").Value<JObject>("CallerInfo").Value<string>("FilePath"));
+            Assert.Equal(callerFilePath, GetObject(GetObject(parsed, "@fields"), "CallerInfo")["FilePath"]);
         }
 
         [Fact]
@@ -122,20 +120,19 @@ namespace Ocelog.Formatting.Logstash.Test
         {
             var message = new { Val = 1 };
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddLevelToAdditionalFields()
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Warn(message);
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal("Warn", parsed.Value<JObject>("@fields").Value<string>("Level"));
+            Assert.Equal(LogLevel.Warn, GetObject(parsed, "@fields")["Level"]);
         }
 
         [Fact]
@@ -143,125 +140,122 @@ namespace Ocelog.Formatting.Logstash.Test
         {
             var message = new { Val = 1 };
 
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddLevelToTags()
                 .AddTagsToAdditionalFields()
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Warn(message);
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Contains("Warn", parsed.Value<JArray>("@tags").ToObject<string[]>());
+            Assert.Contains("Warn", GetArray(parsed, "@tags"));
         }
 
         [Fact]
         public void should_merge_arrays_maintaining_order()
         {
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Things = new[] { "A", "B" } })
                 .AddFields(new { Things = new[] { "C" } })
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Info(new { Things = new[] { "D" } });
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(new[] { "A", "B", "C", "D" }, parsed.Value<JObject>("@fields").Value<JArray>("Things").ToObject<string[]>());
+            Assert.Equal(new object[] { "A", "B", "C", "D" }, GetArray(GetObject(parsed, "@fields"), "Things"));
         }
 
         [Fact]
         public void should_merge_complex_sub_objects()
         {
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Things = new { A = 1, B = 2 } })
                 .AddFields(new { Things = new { C = 3 } })
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Info(new { Things = new { D = 4 } });
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(new Dictionary<string, int> { { "A", 1 }, { "B", 2 }, { "C", 3 }, { "D", 4 } }, parsed.Value<JObject>("@fields").Value<JObject>("Things").ToObject<Dictionary<string, int>>());
+            Assert.Equal(new Dictionary<string, object> { { "A", 1 }, { "B", 2 }, { "C", 3 }, { "D", 4 } }, GetObject(GetObject(parsed, "@fields"), "Things"));
         }
 
         [Fact]
         public void should_merge_dictionaries()
         {
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Things = new Dictionary<string, int> { { "A", 1 }, { "B", 2 } } })
                 .AddFields(new { Things = new Dictionary<string, int> { { "C", 3 } } })
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Info(new { Things = new Dictionary<string, int> { { "D", 4 } } });
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal(new Dictionary<string, int> { { "A", 1 }, { "B", 2 }, { "C", 3 }, { "D", 4 } }, parsed.Value<JObject>("@fields").Value<JObject>("Things").ToObject<Dictionary<string, int>>());
+            Assert.Equal(new Dictionary<string, object> { { "A", 1 }, { "B", 2 }, { "C", 3 }, { "D", 4 } }, GetObject(GetObject(parsed, "@fields"), "Things"));
         }
 
         [Fact]
         public void should_prefer_message_fields_over_additional_fields()
         {
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
                 .AddFields(new { Thing = "Hello" })
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
-            var callerFilePath = GetCallerFilePath();
 
             logger.Info(new { Thing = "There" });
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Equal("There", parsed.Value<JObject>("@fields").Value<string>("Thing"));
+            Assert.Equal("There", GetObject(parsed, "@fields")["Thing"]);
         }
 
         [Fact]
         public void should_ingore_null_fields()
         {
-            var output = new List<FormattedLogEvent>();
+            var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
-                .Select(OldLogstashJson.Format)
+                .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
 
             logger.Info(new { Thing = (string)null });
 
-            JObject parsed = GetJObject(output);
+            var parsed = output[0].Content;
 
-            Assert.Null(parsed.Value<JObject>("@fields").GetValue("Thing"));
+            Assert.True(!GetObject(parsed, "@fields").ContainsKey("Thing"));
         }
 
-        private static JObject GetJObject(List<FormattedLogEvent> output)
+        private Dictionary<string, object> GetObject(Dictionary<string, object> parsed, string param1)
         {
-            var logOutput = output.First().Content;
+            return (Dictionary<string, object>)parsed[param1];
+        }
 
-            var parsed = (JObject)JsonConvert.DeserializeObject(logOutput, new JsonSerializerSettings() { DateParseHandling = DateParseHandling.None });
-            return parsed;
+        private object[] GetArray(Dictionary<string, object> parsed, string v)
+        {
+            return ((IEnumerable<object>)parsed[v]).ToArray();
         }
 
         private string GetCallerFilePath([CallerFilePath]string callerFilePath = "Shouldn't Get This")
