@@ -28,6 +28,10 @@ namespace Ocelog
             if (value is Dictionary<string, object>)
                 return TrimFields((Dictionary<string, object>)value, maxFieldLength);
 
+            var list = value as IEnumerable<object>;
+            if (list != null)
+                return list.Select(item => TrimFields(item, maxFieldLength));
+
             return value;
         }
     }

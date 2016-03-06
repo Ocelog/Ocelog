@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,7 +48,7 @@ namespace Ocelog
 
         public static Dictionary<string, object> ToDictionary(object fields)
         {
-            return ToDictionary(fields, new object [] { });
+            return ToDictionary(fields, new object[] { });
         }
 
         public static Dictionary<string, object> ToDictionary(object fields, object[] stack)
@@ -56,16 +57,37 @@ namespace Ocelog
                 return new Dictionary<string, object>() { { "OcelogWarning", "Found a Circular Reference" } };
 
             var type = fields.GetType();
-            if (type.IsGenericType
-                && type.GetGenericTypeDefinition() == typeof(Dictionary<,>)
-                && type.GetGenericArguments().First() == typeof(string))
+            if (IsCompatibleDictionary(type))
                 return BoxDictionaryValues(type.GetGenericArguments()[1], fields);
 
-            return fields.GetType().GetProperties()
+            return type.GetProperties()
+                .Where(prop => !IsDelegateType(prop.PropertyType))
                 .Where(prop => prop.CanRead
-                    && prop.GetAccessors().Any(access => access.ReturnType != typeof(void) && access.GetParameters().Length == 0))
-                .Where(prop => prop.GetValue(fields) != null)
-                .ToDictionary(prop => prop.Name, prop => ToDictionaryOrObject(prop.GetValue(fields), stack.Push(fields)));
+                    && prop.GetAccessors()
+                        .Any(access => access.ReturnType != typeof(void)
+                            && access.GetParameters().Length == 0))
+                .Where(prop => SafeGetValue(fields, prop) != null)
+                .ToDictionary(prop => prop.Name, prop => ToDictionaryOrObject(SafeGetValue(fields, prop), stack.Push(fields)));
+        }
+
+        private static bool IsCompatibleDictionary(Type type)
+        {
+            return type.GetInterfaces()
+                .Where(valueInterface => valueInterface.IsGenericType)
+                .Where(valueInterface => valueInterface.GetGenericArguments().First() == typeof(string))
+                .Any(valueInterface => (typeof(IDictionary<,>).IsAssignableFrom(valueInterface.GetGenericTypeDefinition())));
+        }
+
+        private static object SafeGetValue(object fields, System.Reflection.PropertyInfo prop)
+        {
+            try
+            {
+                return prop.GetValue(fields);
+            }
+            catch
+            {
+                return new Dictionary<string, object>() { { "OcelogWarning", "Exception thrown by invocation" } };
+            }
         }
 
         private static Dictionary<string, object> BoxDictionaryValues(Type valueType, object fields)
@@ -77,7 +99,7 @@ namespace Ocelog
 
         private static Dictionary<string, object> GenericBoxDictionaryValues<T>(object fields)
         {
-            var dictionary = (Dictionary<string, T>)fields;
+            var dictionary = (IDictionary<string, T>)fields;
 
             return dictionary.ToDictionary<KeyValuePair<string, T>, string, object>(pair => pair.Key, pair => pair.Value);
         }
@@ -86,6 +108,9 @@ namespace Ocelog
         {
             if (IsSimpleType(fields))
                 return fields;
+
+            if (IsInSpecialCaseList(fields))
+                return fields.ToString();
 
             if (fields.GetType().IsArray)
                 return ToList((object[])fields, stack);
@@ -112,7 +137,14 @@ namespace Ocelog
                 || type == typeof(string)
                 || type.IsEnum;
         }
-        
+
+        private static bool IsInSpecialCaseList(object fields)
+        {
+            var type = fields.GetType();
+
+            return typeof(System.Reflection.MethodBase).IsAssignableFrom(type);
+        }
+
         private static bool IsPredicate(object content)
         {
             var type = content.GetType();
@@ -121,8 +153,13 @@ namespace Ocelog
                    && type.GetGenericTypeDefinition() == typeof(Predicate<>)
                    && type.GetGenericArguments().Length == 1;
         }
-        
-        private static object[] Push(this object [] @this, object toPush)
+
+        private static bool IsDelegateType(Type type)
+        {
+            return typeof(Delegate).IsAssignableFrom(type);
+        }
+
+        private static object[] Push(this object[] @this, object toPush)
         {
             return @this.Concat(new object[] { toPush }.AsEnumerable()).ToArray();
         }

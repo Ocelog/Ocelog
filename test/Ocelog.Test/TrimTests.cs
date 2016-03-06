@@ -50,6 +50,25 @@ namespace Ocelog.Test
         }
 
         [Fact]
+        public void should_trim_fields_that_are_in_lists()
+        {
+            var obj = new { Thing = new[] { "A very long message that should be trimmed" } };
+
+            var output = new List<ProcessedLogEvent>();
+            var logger = new Logger(logEvents => logEvents
+                .Select(BasicFormatting.Process)
+                .Select(MessageTrimming.TrimFields(6))
+                .Subscribe(log => output.Add(log))
+                );
+
+            logger.Info(obj);
+
+            var message = ((IEnumerable<object>)output[0].Content["Thing"]).First();
+
+            Assert.Equal("A very", message);
+        }
+
+        [Fact]
         public void should_leave_enums_ints_and_doubles_unaffected()
         {
             var obj = new { Message = "A very long message that should be trimmed", Number = 123456, Enumer = LogLevel.Error, Doub = 1234.56789 };
