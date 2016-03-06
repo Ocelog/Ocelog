@@ -12,7 +12,7 @@ namespace Ocelog.Formatting.Logstash
             var requiredFields = new Dictionary<string, object>()
             {
                 { "@version", 1 },
-                { "@timestamp", logEvent.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) }
+                { "@timestamp", logEvent.Timestamp.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture) }
             };
 
             var allFields = new object[] { requiredFields }
