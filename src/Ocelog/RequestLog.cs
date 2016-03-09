@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ocelog
 {
     public class RequestLog : IDisposable
     {
-        private List<object> _fields = new List<object>();
+        private ConcurrentQueue<object> _fields = new ConcurrentQueue<object>();
         private Subject<LogEvent> _logEvents;
         
         internal RequestLog(Subject<LogEvent> _logEvents)
@@ -20,7 +19,7 @@ namespace Ocelog
 
         public void Add(object newFields)
         {
-            _fields.Add(newFields);
+            _fields.Enqueue(newFields);
         }
 
         public void Complete([CallerFilePath] string callerFilePath = "", [CallerLineNumber]int callerLineNumber = 0)
