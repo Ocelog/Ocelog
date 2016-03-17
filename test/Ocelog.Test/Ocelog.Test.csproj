@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FieldNamesTests.cs" />
     <Compile Include="TrimTests.cs" />
     <Compile Include="FilteringTests.cs" />
     <Compile Include="ExceptionHandlingTests.cs" />
