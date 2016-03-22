@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reactive.Linq;
-using System.Reflection;
 
 namespace Ocelog.Testing
 {
@@ -17,21 +14,6 @@ namespace Ocelog.Testing
         public LoggingSpy()
         {
             Logger = new Logger(events => events.Subscribe(RecordLog));
-        }
-
-        public bool DidInfo(object content)
-        {
-            return DidLog(LogLevel.Info, content);
-        }
-
-        public bool DidWarn(object content)
-        {
-            return DidLog(LogLevel.Warn, content);
-        }
-
-        public bool DidError(object content)
-        {
-            return DidLog(LogLevel.Error, content);
         }
 
         public void AssertDidInfo(object content)
@@ -47,11 +29,6 @@ namespace Ocelog.Testing
         public void AssertDidError(object content)
         {
             AssertDidLog(LogLevel.Error, content);
-        }
-
-        private bool DidLog(LogLevel logLevel, object content)
-        {
-            return _logEvents.Any(item => item.Level == logLevel && DidMatch(item.Content, content, "").Item1);
         }
 
         private void AssertDidLog(LogLevel logLevel, object content)
@@ -94,7 +71,7 @@ namespace Ocelog.Testing
         }
 
         private Tuple<bool, string> DidPropertiesMatch(object actualContent, object expectedContent, string path)
-        { 
+        {
             var expectedProperties = GetValueProperties(expectedContent);
             var actualProperties = GetValueProperties(actualContent);
 

@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoggingSpyTests.cs" />
-    <Compile Include="LoggingSpy_AssertionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
