@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ocelog</id>
-    <version>2.0.0-beta8</version>
+    <version>2.0.0-beta9</version>
     <authors>Andy Lowry</authors>
     <owners>Andy Lowry</owners>
     <licenseUrl>https://github.com/Ocelog/Ocelog/blob/master/LICENSE</licenseUrl>
@@ -10,7 +10,7 @@
     <iconUrl>https://raw.githubusercontent.com/Ocelog/Ocelog/master/Ocelog_icon.jpg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</description>
-    <releaseNotes>Intial version</releaseNotes>
+    <releaseNotes>Add net45 support</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>Logging .net Logstash Structured</tags>
     <dependencies>
