@@ -1,5 +1,6 @@
 mkdir lib
 mkdir lib\net46
+mkdir lib\net45
 mkdir tools
 mkdir content
 mkdir content\controllers
