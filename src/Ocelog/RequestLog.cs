@@ -11,7 +11,7 @@ namespace Ocelog
     {
         private ConcurrentQueue<object> _fields = new ConcurrentQueue<object>();
         private Subject<LogEvent> _logEvents;
-        
+
         internal RequestLog(Subject<LogEvent> _logEvents)
         {
             this._logEvents = _logEvents;
@@ -21,7 +21,6 @@ namespace Ocelog
         {
             _fields.Enqueue(newFields);
         }
-
         public void Complete([CallerFilePath] string callerFilePath = "", [CallerLineNumber]int callerLineNumber = 0)
         {
             var logEvent = new LogEvent() { Level = LogLevel.Info };
