@@ -6,6 +6,18 @@ Structured Logging is now becoming more and more common. Logging complex objects
 
 See http://engineering.laterooms.com/structured-logging-with-elk-part-1/ , http://engineering.laterooms.com/structured-logging-with-elk-part-2/ and http://engineering.laterooms.com/structured-logging-with-elk-part-3/ to understand the reasons this logging library came about.
 
+##Basic Logging
+
+Logging is simple with Ocelog. You can log any objects you want with it. Normally these are anoymous classes with some fields, but you can use named classes if you wish. By convention objects have at minimum a Message field describing the event and then any additional information you wish to add. (Note the message field is optional but recommended)
+
+    log.Info(new { Message = "An event happened" });
+    log.Info(new { Message = "Price updated", StockId = id, NewPrice = price });
+    log.Info(new { Message = "Checkout price calculated", BasketContents = basket, Price = totalPrice });
+    log.Warn(new { Message = "Unrecognised url, redirecting", UnknownUrl = uri, RedirectUrl = homePageUrl });
+    log.Error(new { Message = "Error calling stock service", Exception = exception });
+
+It helps to be aware of what kind of storage the event will finally be stored in. For example, different document stores have different behaviour around consistant types for a given field name. It's best to agree a consistant pattern for common field names and types that everyone uses.
+
 ## Adding context
 
 ### Additional Fields
@@ -22,10 +34,19 @@ File path and line number of where the log event originated from.
 
 ## Request Logging
 
+Request logging allows you to write a single event with data from mutiple locations in the code. Start a request log from a common section of code, (usually a composition root or DI container) and Complete it when all the infomation has been added to write the log.
+
     _requestLog = logger.StartRequestLog();
-    _requestLog.Add(new { Something = "Happened"});
-    _requestLog.Add(new { Timing = 23});
-    _requestLog.Complete();
+    _requestLog.Add(new { Something = "Happened" });
+    _requestLog.Add(new { Timing = 23 });
+    _requestLog.Complete
+    
+This writes a single log entry with this content:
+
+    {
+        "Something" : "Happened",
+        "Timing" : 23
+    }
 
 ## Configuration by code
 
