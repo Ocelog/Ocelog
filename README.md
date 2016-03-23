@@ -55,6 +55,38 @@ Between these 3 steps is where you can do any customisation you want. Here is a 
 
 In this example first all the context information such as message level, caller info, and hostname is added first. Once the stream is processed we can tweak the over fields, by trimming the length of long string values, and converting all the field names to snake case. Finaly the events are sent over UDP to the given address and port.
 
+## Testing
+
+Most testing frameworks can be very hard to test with. Having to parse strings in tests can make them very brittle, and changes to code can cause unrelated tests to fail. Also setting up logger just for your tests can be very tidious. To help with this Ocelog provides LoggingSpy to do much of the difficult work for you and keep you tests clear.
+
+For the most basic tests that don't tests anything logging specific you can provide a logger to your code under test like this:
+
+    var codeUnderTest = new SomethingThatLogs(new LoggingSpy().Logger);
+
+If you want to test that your code writes to the log you can use LoggingSpys Assert methods.
+
+    [Test]
+    public void Test_a_log_is_written_out()
+    {
+        var loggingSpy = new LoggingSpy();
+        var codeUnderTest = new SomethingThatLogs(loggingSpy.Logger);
+        
+        codeUnderTest.WriteOutLog();
+        
+        loggingSpy.AssertDidInfo(new { Message = "I wrote a log" });
+    }
+
+If the code does not write any matching logs, it will tell you which fields are missing or which values don't match in the execption that is thrown, allowing you to tell if your test is failing for the right reason if your about to make it pass, or tell you what is broken if you didn't mean to break it.
+
+The assert methods also allow you to assert on anonymous types without resorting to reflection, and you can use Dictionary objects that match the equivilent fields if prefer.
+
+If you are using a RequestLog, LoggingSpy combins all the added objects first, before testing the assertion, this means that your implementation can switch between a single log write and a RequestLog without breaking your tests.
+
+If you need a little more control over your assertion you can provide a predicate instead of a value.
+
+    loggingSpy.AssertDidInfo(new { Message = new Predicate<string>(m => m.Contains("wrote")) });
+
+
 ## Examples
 
 ### Building a logger
