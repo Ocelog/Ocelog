@@ -86,6 +86,26 @@ If you need a little more control over your assertion you can provide a predicat
 
     loggingSpy.AssertDidInfo(new { Message = new Predicate<string>(m => m.Contains("wrote")) });
 
+##Moving from development to production (Handling unexpected exceptions)
+
+By default Ocelog does not catch any exceptions. This is by design, as it makes initial setup of your logger much easier as any exceptions thrown in logging code come out through your regular exception handling mechanism instead of being hidden in some debug trace. However you probably don't want this behvaiour in production so Ocelog provides a way of handling these exceptions:
+
+    events
+        .IgnoreLoggingErrors()
+        .Process(BasicFormatting.Process)
+        ...
+
+Adding IgnoreLoggingErrors to the start of your logging pipeline means that any exceptions are simply caught and then ignored. You'll want to add this to teh start of your pipeline so all logging exception are handled. You can also log these exception using HandleLoggingErrors:
+
+    events
+        .HandleLoggingErrors(logErrors => logErrors
+            .Process(BasicFormatting.Process)
+            .Format(JsonFormatter.Format)
+            .Subscribe(e => System.Console.WriteLine(e.Content)))
+        .Process(BasicFormatting.Process)
+        ...
+
+This will log any exceptions thrown by the logging pipeline to the console. `logErrors` is another Observable the same as `events` and you can do exactly the same as you can with any other logging events.
 
 ## Examples
 
