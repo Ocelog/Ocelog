@@ -6,9 +6,15 @@ namespace Ocelog
 {
     public static class ContextExtensions
     {
-        public static IObservable<LogEvent> AddTimestamp(this IObservable<LogEvent> logEvents, DateTime? now = null)
+        [Obsolete("You probably didn't mean to use this, use override with function instead")]
+        public static IObservable<LogEvent> AddTimestamp(this IObservable<LogEvent> logEvents, DateTime now)
         {
-            return logEvents.Do(log => log.Timestamp = now ?? DateTime.Now);
+            return logEvents.AddTimestamp(() => now);
+        }
+
+        public static IObservable<LogEvent> AddTimestamp(this IObservable<LogEvent> logEvents, Func<DateTime> getCurrentTime = null)
+        {
+            return logEvents.Do(log => log.Timestamp = getCurrentTime == null ? DateTime.Now : getCurrentTime());
         }
 
         public static IObservable<LogEvent> AddFields(this IObservable<LogEvent> logEvents, object additionalFields)

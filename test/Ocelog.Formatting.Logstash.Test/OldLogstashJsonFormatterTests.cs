@@ -20,7 +20,7 @@ namespace Ocelog.Formatting.Logstash.Test
             var output = new List<ProcessedLogEvent>();
 
             Logger logger = new Logger(logEvents => logEvents
-                .AddTimestamp(timestamp)
+                .AddTimestamp(() => timestamp)
                 .Select(OldLogstashJson.Process)
                 .Subscribe(log => output.Add(log))
                 );
