@@ -24,6 +24,7 @@ namespace Ocelog.Test
 
             Assert.Contains("mytag", logEvent.Tags);
         }
+
         [Fact]
         public void should_set_timestamp_to_specified()
         {

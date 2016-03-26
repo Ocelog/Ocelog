@@ -67,6 +67,7 @@
     <Compile Include="BasicFormatting.cs" />
     <Compile Include="CallerInfo.cs" />
     <Compile Include="FieldNameFormatting.cs" />
+    <Compile Include="ContextExtensions.cs" />
     <Compile Include="MessageTrimming.cs" />
     <Compile Include="ErrorHandlingObserver.cs" />
     <Compile Include="FormattedLogEvent.cs" />
