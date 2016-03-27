@@ -74,7 +74,9 @@ Between these 3 steps is where you can do any customisation you want. Here is a 
         .Format(JsonFormatter.Format)
         .Subscribe(UDPTransport.Send("logstash.local", 2345)));
 
-In this example first all the context information such as message level, caller info, and hostname is added first. Once the stream is processed we can tweak the over fields, by trimming the length of long string values, and converting all the field names to snake case. Finaly the events are sent over UDP to the given address and port.
+In this example first all the context information such as message level, caller info, and hostname is added first. Once the stream is processed we can tweak the over fields, by trimming the length of long string values, and converting all the field names to snake case. Finally the events are sent over UDP to the given address and port.
+
+See [Advanced Configuration](https://github.com/Ocelog/Ocelog/wiki/Advanced-Configuration) for more detailed information.
 
 ## Testing
 
@@ -116,7 +118,7 @@ By default Ocelog does not catch any exceptions. This is by design, as it makes 
         .Process(BasicFormatting.Process)
         ...
 
-Adding IgnoreLoggingErrors to the start of your logging pipeline means that any exceptions are simply caught and then ignored. You'll want to add this to teh start of your pipeline so all logging exception are handled. You can also log these exception using HandleLoggingErrors:
+Adding IgnoreLoggingErrors to the start of your logging pipeline means that any exceptions are simply caught and then ignored. You'll want to add this to the start of your pipeline so all logging exception are handled. You can also log these exceptions using HandleLoggingErrors:
 
     events
         .HandleLoggingErrors(logErrors => logErrors
