@@ -23,7 +23,23 @@ namespace Ocelog
 
         private static Dictionary<string, object> ToSnakeCase(Dictionary<string, object> content)
         {
-            return content.ToDictionary(pair => ToSnakeCase(pair.Key), pair => pair.Value);
+            return content.ToDictionary(pair => ToSnakeCase(pair.Key), pair => ObjectToSnakeCase(pair.Value));
+        }
+
+        private static object ObjectToSnakeCase(object val)
+        {
+            if (val is Dictionary<string, object>)
+            {
+                return ToSnakeCase((Dictionary<string, object>)val);
+            }
+
+            var list = val as IEnumerable<object>;
+            if (list != null)
+            {
+                return list.Select(ObjectToSnakeCase);
+            }
+
+            return val;
         }
 
         private static string ToSnakeCase(string key)
@@ -33,7 +49,23 @@ namespace Ocelog
 
         private static Dictionary<string, object> ToPascalCase(Dictionary<string, object> content)
         {
-            return content.ToDictionary(pair => ToPascalCase(pair.Key), pair => pair.Value);
+            return content.ToDictionary(pair => ToPascalCase(pair.Key), pair => ObjectToPascalCase(pair.Value));
+        }
+
+        private static object ObjectToPascalCase(object val)
+        {
+            if (val is Dictionary<string, object>)
+            {
+                return ToPascalCase((Dictionary<string, object>)val);
+            }
+
+            var list = val as IEnumerable<object>;
+            if (list != null)
+            {
+                return list.Select(ObjectToPascalCase);
+            }
+
+            return val;
         }
 
         private static string ToPascalCase(string key)
@@ -43,7 +75,23 @@ namespace Ocelog
 
         private static Dictionary<string, object> ToCamelCase(Dictionary<string, object> content)
         {
-            return content.ToDictionary(pair => ToCamelCase(pair.Key), pair => pair.Value);
+            return content.ToDictionary(pair => ToCamelCase(pair.Key), pair => ObjectToCamelCase(pair.Value));
+        }
+
+        private static object ObjectToCamelCase(object val)
+        {
+            if (val is Dictionary<string, object>)
+            {
+                return ToCamelCase((Dictionary<string, object>)val);
+            }
+
+            var list = val as IEnumerable<object>;
+            if (list != null)
+            {
+                return list.Select(ObjectToCamelCase);
+            }
+
+            return val;
         }
 
         private static string ToCamelCase(string key)
