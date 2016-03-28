@@ -6,7 +6,7 @@ using Xunit;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Ocelog.Formatting.Logstash.Test
+namespace Ocelog.Processing.Logstash.Test
 {
     public class OldLogstashJsonFormatterTests
     {

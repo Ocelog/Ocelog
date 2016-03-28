@@ -7,9 +7,10 @@
     <ProjectGuid>{AB8C0B65-ADB2-4F0A-9296-4F19CB73A7DD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ocelog.Formatting.Logstash.Test</RootNamespace>
-    <AssemblyName>Ocelog.Formatting.Logstash.Test</AssemblyName>
+    <RootNamespace>Ocelog.Processing.Logstash.Test</RootNamespace>
+    <AssemblyName>Ocelog.Processing.Logstash.Test</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-46|AnyCPU' ">
@@ -21,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-45|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-46|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -88,9 +92,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Ocelog.Formatting.Logstash\Ocelog.Formatting.Logstash.csproj">
+    <ProjectReference Include="..\..\src\Ocelog.Processing.Logstash\Ocelog.Processing.Logstash.csproj">
       <Project>{970ea7f9-d1ae-4641-81c9-58679ce52f7a}</Project>
-      <Name>Ocelog.Formatting.Logstash</Name>
+      <Name>Ocelog.Processing.Logstash</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Ocelog\Ocelog.csproj">
       <Project>{3f7abccc-bfd1-4cb6-b363-ec28ea33b769}</Project>

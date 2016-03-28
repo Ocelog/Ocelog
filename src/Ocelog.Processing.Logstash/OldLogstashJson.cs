@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Ocelog.Formatting.Logstash
+namespace Ocelog.Processing.Logstash
 {
     public static class OldLogstashJson
     {

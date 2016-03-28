@@ -7,9 +7,10 @@
     <ProjectGuid>{970EA7F9-D1AE-4641-81C9-58679CE52F7A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ocelog.Formatting.Logstash</RootNamespace>
-    <AssemblyName>Ocelog.Formatting.Logstash</AssemblyName>
+    <RootNamespace>Ocelog.Processing.Logstash</RootNamespace>
+    <AssemblyName>Ocelog.Processing.Logstash</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-46|AnyCPU' ">

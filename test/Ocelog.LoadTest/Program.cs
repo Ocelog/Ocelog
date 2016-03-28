@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Ocelog.Formatting.Json;
-using Ocelog.Formatting.Logstash;
+using Ocelog.Processing.Logstash;
 using Ocelog.Transport.Http;
 using Ocelog.Transport.UDP;
 using System.Reactive.Linq;

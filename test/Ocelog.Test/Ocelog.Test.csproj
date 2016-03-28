@@ -10,6 +10,7 @@
     <RootNamespace>Ocelog.Test</RootNamespace>
     <AssemblyName>Ocelog.Test</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-46|AnyCPU' ">

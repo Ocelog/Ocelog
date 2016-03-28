@@ -77,9 +77,9 @@
       <Project>{652d0de3-7efc-4f08-9953-ce941f2a3d54}</Project>
       <Name>Ocelog.Formatting.Json</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog.Formatting.Logstash\Ocelog.Formatting.Logstash.csproj">
+    <ProjectReference Include="..\..\src\Ocelog.Processing.Logstash\Ocelog.Processing.Logstash.csproj">
       <Project>{970ea7f9-d1ae-4641-81c9-58679ce52f7a}</Project>
-      <Name>Ocelog.Formatting.Logstash</Name>
+      <Name>Ocelog.Processing.Logstash</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Ocelog.Testing\Ocelog.Testing.csproj">
       <Project>{8e7bdee4-0d41-4074-a7bb-58108b718edc}</Project>
