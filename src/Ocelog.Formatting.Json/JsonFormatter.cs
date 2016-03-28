@@ -8,16 +8,16 @@ namespace Ocelog.Formatting.Json
 {
     public static class JsonFormatter
     {
-        public static FormattedLogEvent Format(ProcessedLogEvent processedLogEvent)
+        public static FormattedLogEvent Format(ProcessedLogEvent logEvent)
         {
-            var document = processedLogEvent.Content;
+            var document = logEvent.Content;
 
             var jsonSerializer = new JsonSerializer() { NullValueHandling = NullValueHandling.Ignore };
             jsonSerializer.Converters.Add(new StringEnumConverter() { AllowIntegerValues = false });
 
             var json = JObject.FromObject(document, jsonSerializer);
 
-            return new FormattedLogEvent() { Content = JsonConvert.SerializeObject(json) };
+            return FormattedLogEvent.Format(JsonConvert.SerializeObject(json), logEvent);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Ocelog.Transport.UDP.Test
             var client = new UdpClient(port);
 
             UDPTransport.Send("127.0.0.1", port)
-                .OnNext(new FormattedLogEvent() { Content = "This is my content" });
+                .OnNext(FormattedLogEvent.Format("This is my content", new LogEvent()));
 
             var response = await client.ReceiveAsync();
 

@@ -11,14 +11,14 @@ namespace Ocelog.Transport.UDP
     {
         public static IObserver<FormattedLogEvent> Send(string host, int port)
         {
-            return new SendLogsToLogstash(host, port);
+            return new SendLogsToUdp(host, port);
         }
 
-        internal class SendLogsToLogstash : IObserver<FormattedLogEvent>
+        internal class SendLogsToUdp : IObserver<FormattedLogEvent>
         {
             private UdpClient _client;
 
-            public SendLogsToLogstash(string host, int port)
+            public SendLogsToUdp(string host, int port)
             {
                 _client = new UdpClient(host, port);
             }

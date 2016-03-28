@@ -10,7 +10,7 @@ namespace Ocelog
     {
         public static Func<ProcessedLogEvent, ProcessedLogEvent> TrimFields(int maxFieldLength)
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = TrimFields(logEvent.Content, maxFieldLength) };
+            return (logEvent) => ProcessedLogEvent.Process(TrimFields(logEvent.Content, maxFieldLength), logEvent);
         }
 
         private static Dictionary<string, object> TrimFields(Dictionary<string, object> content, int maxFieldLength)

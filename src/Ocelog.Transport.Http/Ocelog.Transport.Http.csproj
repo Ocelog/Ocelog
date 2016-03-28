@@ -4,11 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug-46</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}</ProjectGuid>
+    <ProjectGuid>{9FB1BDAB-4CDB-4FB0-9E86-FA549324EE2E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ocelog</RootNamespace>
-    <AssemblyName>Ocelog</AssemblyName>
+    <RootNamespace>Ocelog.Transport.Http</RootNamespace>
+    <AssemblyName>Ocelog.Transport.Http</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -44,18 +45,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,22 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicFormatting.cs" />
-    <Compile Include="CallerInfo.cs" />
-    <Compile Include="FieldNameFormatting.cs" />
-    <Compile Include="ContextExtensions.cs" />
-    <Compile Include="ILogEventContext.cs" />
-    <Compile Include="MessageTrimming.cs" />
-    <Compile Include="ErrorHandlingObserver.cs" />
-    <Compile Include="FormattedLogEvent.cs" />
-    <Compile Include="InvalidLogMessageTypeException.cs" />
-    <Compile Include="LogEvent.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="LogObservableExtensions.cs" />
-    <Compile Include="ObjectMerging.cs" />
-    <Compile Include="ProcessedLogEvent.cs" />
+    <Compile Include="HttpTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestLog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ocelog\Ocelog.csproj">
+      <Project>{3f7abccc-bfd1-4cb6-b363-ec28ea33b769}</Project>
+      <Name>Ocelog</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -12,10 +12,10 @@ namespace Ocelog
         Error
     }
 
-    public class LogEvent
+    public class LogEvent : ILogEventContext
     {
         private ConcurrentQueue<string> _tags = new ConcurrentQueue<string>();
-        private ConcurrentQueue<object> _fields= new ConcurrentQueue<object>();
+        private ConcurrentQueue<object> _fields = new ConcurrentQueue<object>();
         private object _content;
 
         public object Content

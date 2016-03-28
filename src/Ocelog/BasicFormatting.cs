@@ -10,7 +10,7 @@ namespace Ocelog
             var allFields = logEvent.AdditionalFields
                 .Concat(new object[] { logEvent.Content });
 
-            return new ProcessedLogEvent() { Content = ObjectMerging.Flatten(allFields) };
+            return ProcessedLogEvent.Process(ObjectMerging.Flatten(allFields), logEvent);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Ocelog.Formatting.Logstash
                 { "@fields", ObjectMerging.Flatten(allFields) }
             };
 
-            return new ProcessedLogEvent() { Content = requiredFields };
+            return ProcessedLogEvent.Process(requiredFields, logEvent);
         }
     }
 }

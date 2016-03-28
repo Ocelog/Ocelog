@@ -8,17 +8,17 @@ namespace Ocelog
     {
         public static Func<ProcessedLogEvent, ProcessedLogEvent> ToSnakeCase()
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = ToSnakeCase(logEvent.Content) };
+            return (logEvent) => ProcessedLogEvent.Process(ToSnakeCase(logEvent.Content), logEvent);
         }
 
         public static Func<ProcessedLogEvent, ProcessedLogEvent> ToPascalCase()
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = ToPascalCase(logEvent.Content) };
+            return (logEvent) => ProcessedLogEvent.Process(ToPascalCase(logEvent.Content), logEvent);
         }
 
         public static Func<ProcessedLogEvent, ProcessedLogEvent> ToCamelCase()
         {
-            return (logEvent) => new ProcessedLogEvent() { Content = ToCamelCase(logEvent.Content) };
+            return (logEvent) => ProcessedLogEvent.Process(ToCamelCase(logEvent.Content), logEvent);
         }
 
         private static Dictionary<string, object> ToSnakeCase(Dictionary<string, object> content)

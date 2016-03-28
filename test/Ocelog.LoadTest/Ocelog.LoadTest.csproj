@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug-46</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3F7ABCCC-BFD1-4CB6-B363-EC28EA33B769}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{75C04AA2-70E4-4300-99B6-54DAE650BA48}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ocelog</RootNamespace>
-    <AssemblyName>Ocelog</AssemblyName>
+    <RootNamespace>Ocelog.LoadTest</RootNamespace>
+    <AssemblyName>Ocelog.LoadTest</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-46|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,25 +65,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicFormatting.cs" />
-    <Compile Include="CallerInfo.cs" />
-    <Compile Include="FieldNameFormatting.cs" />
-    <Compile Include="ContextExtensions.cs" />
-    <Compile Include="ILogEventContext.cs" />
-    <Compile Include="MessageTrimming.cs" />
-    <Compile Include="ErrorHandlingObserver.cs" />
-    <Compile Include="FormattedLogEvent.cs" />
-    <Compile Include="InvalidLogMessageTypeException.cs" />
-    <Compile Include="LogEvent.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="LogObservableExtensions.cs" />
-    <Compile Include="ObjectMerging.cs" />
-    <Compile Include="ProcessedLogEvent.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestLog.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Ocelog.Formatting.Json\Ocelog.Formatting.Json.csproj">
+      <Project>{652d0de3-7efc-4f08-9953-ce941f2a3d54}</Project>
+      <Name>Ocelog.Formatting.Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Ocelog.Formatting.Logstash\Ocelog.Formatting.Logstash.csproj">
+      <Project>{970ea7f9-d1ae-4641-81c9-58679ce52f7a}</Project>
+      <Name>Ocelog.Formatting.Logstash</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Ocelog.Testing\Ocelog.Testing.csproj">
+      <Project>{8e7bdee4-0d41-4074-a7bb-58108b718edc}</Project>
+      <Name>Ocelog.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Ocelog.Transport.Http\Ocelog.Transport.Http.csproj">
+      <Project>{9fb1bdab-4cdb-4fb0-9e86-fa549324ee2e}</Project>
+      <Name>Ocelog.Transport.Http</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Ocelog.Transport.UDP\Ocelog.Transport.UDP.csproj">
+      <Project>{fc2d918c-9539-446f-96b3-9e8d929cba65}</Project>
+      <Name>Ocelog.Transport.UDP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Ocelog\Ocelog.csproj">
+      <Project>{3f7abccc-bfd1-4cb6-b363-ec28ea33b769}</Project>
+      <Name>Ocelog</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="credentials.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
