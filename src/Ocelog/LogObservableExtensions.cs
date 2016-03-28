@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -29,6 +30,11 @@ namespace Ocelog
         }
 
         public static IObservable<FormattedLogEvent> Format(this IObservable<ProcessedLogEvent> logEvents, Func<ProcessedLogEvent, FormattedLogEvent> func)
+        {
+            return logEvents.Select(func);
+        }
+
+        public static IObservable<FormattedLogEvent> Format(this IObservable<IList<ProcessedLogEvent>> logEvents, Func<IList<ProcessedLogEvent>, FormattedLogEvent> func)
         {
             return logEvents.Select(func);
         }

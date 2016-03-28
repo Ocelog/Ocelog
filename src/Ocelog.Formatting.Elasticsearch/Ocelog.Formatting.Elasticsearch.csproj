@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug-46</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{75C04AA2-70E4-4300-99B6-54DAE650BA48}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{0F23672E-83AC-452A-B696-82B42DC13129}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ocelog.LoadTest</RootNamespace>
-    <AssemblyName>Ocelog.LoadTest</AssemblyName>
+    <RootNamespace>Ocelog.Formatting.Elasticsearch</RootNamespace>
+    <AssemblyName>Ocelog.Formatting.Elasticsearch</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-46|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,20 +43,12 @@
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,47 +57,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="ElasticsearchBulkFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Ocelog.Formatting.Elasticsearch\Ocelog.Formatting.Elasticsearch.csproj">
-      <Project>{0f23672e-83ac-452a-b696-82b42dc13129}</Project>
-      <Name>Ocelog.Formatting.Elasticsearch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog.Formatting.Json\Ocelog.Formatting.Json.csproj">
-      <Project>{652d0de3-7efc-4f08-9953-ce941f2a3d54}</Project>
-      <Name>Ocelog.Formatting.Json</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog.Processing.Logstash\Ocelog.Processing.Logstash.csproj">
-      <Project>{970ea7f9-d1ae-4641-81c9-58679ce52f7a}</Project>
-      <Name>Ocelog.Processing.Logstash</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog.Testing\Ocelog.Testing.csproj">
-      <Project>{8e7bdee4-0d41-4074-a7bb-58108b718edc}</Project>
-      <Name>Ocelog.Testing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog.Transport.Http\Ocelog.Transport.Http.csproj">
-      <Project>{9fb1bdab-4cdb-4fb0-9e86-fa549324ee2e}</Project>
-      <Name>Ocelog.Transport.Http</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog.Transport.UDP\Ocelog.Transport.UDP.csproj">
-      <Project>{fc2d918c-9539-446f-96b3-9e8d929cba65}</Project>
-      <Name>Ocelog.Transport.UDP</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Ocelog\Ocelog.csproj">
+    <ProjectReference Include="..\Ocelog\Ocelog.csproj">
       <Project>{3f7abccc-bfd1-4cb6-b363-ec28ea33b769}</Project>
       <Name>Ocelog</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="credentials.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
