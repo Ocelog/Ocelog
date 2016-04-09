@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Ocelog
 {
-    public class Logger
+    public class Logger : IDisposable
     {
         private Subject<LogEvent> _logEvents;
 
@@ -43,6 +43,12 @@ namespace Ocelog
         private void Log(LogLevel level, object logDetail, CallerInfo callerInfo)
         {
             _logEvents.OnNext(new LogEvent() { Level = level, Content = logDetail, CallerInfo = callerInfo });
+        }
+
+        public void Dispose()
+        {
+            _logEvents.OnCompleted();
+            _logEvents.Dispose();
         }
     }
 }
