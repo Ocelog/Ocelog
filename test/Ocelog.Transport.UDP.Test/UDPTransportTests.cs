@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Ocelog.Transport.UDP.Test
@@ -18,7 +14,7 @@ namespace Ocelog.Transport.UDP.Test
             var client = new UdpClient(port);
 
             UDPTransport.Send("127.0.0.1", port)
-                .OnNext(new FormattedLogEvent() { Content = "This is my content" });
+                .OnNext(new FormattedLogEvent { Content = "This is my content" });
 
             var response = await client.ReceiveAsync();
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Ocelog.Test
@@ -24,12 +23,11 @@ namespace Ocelog.Test
 
             Assert.Contains("mytag", logEvent.Tags);
         }
+
         [Fact]
-        public void should_set_timestamp_to_specified()
+        public void should_add_tags_when_event_logged()
         {
             var output = new List<LogEvent>();
-
-            var now = DateTime.Now;
 
             var logger = new Logger(logEvents => logEvents
                 .AddTag("mytag")

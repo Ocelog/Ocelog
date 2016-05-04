@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 
 namespace Ocelog.Testing
 {
     public class LoggingSpy
     {
-        private List<LogEvent> _logEvents = new List<LogEvent>();
+        private readonly List<LogEvent> _logEvents = new List<LogEvent>();
 
         public Logger Logger { get; private set; }
 
@@ -67,7 +66,6 @@ namespace Ocelog.Testing
                 return actualContent.Equals(expectedContent) ? Pass() : Fail($"Not equal ({path}) Expected: {expectedContent} but got {actualContent}");
 
             return DidPropertiesMatch(actualContent, expectedContent, path);
-
         }
 
         private Tuple<bool, string> DidPropertiesMatch(object actualContent, object expectedContent, string path)
@@ -122,8 +120,8 @@ namespace Ocelog.Testing
         {
             return actualContent.GetType().IsValueType
                 || expectedContent.GetType().IsValueType
-                || actualContent.GetType() == typeof(string)
-                || expectedContent.GetType() == typeof(string);
+                || actualContent is string
+                || expectedContent is string;
         }
 
         private bool IsMatchingPredicate(object expectedContent, object actualContent)
