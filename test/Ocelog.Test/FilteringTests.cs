@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using System.Reactive.Linq;
 
@@ -14,7 +11,6 @@ namespace Ocelog.Test
         public void should_allow_filtering_of_events_being_logged()
         {
             var output = new List<LogEvent>();
-            var exception = new Exception();
             var logger = new Logger(logEvents => logEvents
                 .Where(log => log.Level == LogLevel.Warn)
                 .Subscribe(log => output.Add(log))
@@ -34,7 +30,6 @@ namespace Ocelog.Test
             var warnOutput = new List<LogEvent>();
             var errorOutput = new List<LogEvent>();
             var allOutput = new List<LogEvent>();
-            var exception = new Exception();
             var logger = new Logger(logEvents =>
             {
                 logEvents

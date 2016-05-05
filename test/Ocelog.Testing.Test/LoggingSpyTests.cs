@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Xunit;
 
 namespace Ocelog.Testing.Test
@@ -78,7 +77,7 @@ namespace Ocelog.Testing.Test
         }
 
         [Fact]
-        public void should_not_assert_when_at_least_one_matching_log_found()
+        public void should_assert_when_at_least_one_matching_log_found()
         {
             var logSpy = new LoggingSpy();
             var content = new { Some = "Thing" };

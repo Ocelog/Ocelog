@@ -5,8 +5,8 @@ namespace Ocelog
 {
     internal class ErrorHandlingObserver : IObserver<LogEvent>
     {
-        private Subject<LogEvent> _logEvents;
-        private Subject<LogEvent> _logExceptionEvents =  new Subject<LogEvent>();
+        private readonly Subject<LogEvent> _logEvents;
+        private readonly Subject<LogEvent> _logExceptionEvents =  new Subject<LogEvent>();
 
         public ErrorHandlingObserver(Subject<LogEvent> logEvents, Action<IObservable<LogEvent>> loggingPipelineFactory)
         {

@@ -36,9 +36,9 @@ namespace Ocelog.Test
         {
             var parentblob = new Blob();
 
-            var deepchild = new Blob() { Child = parentblob };
+            var deepchild = new Blob { Child = parentblob };
 
-            parentblob.Child = new Blob() { Child = new Blob() { Child = new Blob() { Child = deepchild } } };
+            parentblob.Child = new Blob { Child = new Blob { Child = new Blob { Child = deepchild } } };
 
             var dictionary = ObjectMerging.ToDictionary(parentblob);
 

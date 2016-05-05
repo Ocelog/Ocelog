@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ocelog
+﻿namespace Ocelog
 {
     public class CallerInfo
     {

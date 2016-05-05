@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Ocelog
 {
@@ -14,8 +13,8 @@ namespace Ocelog
 
     public class LogEvent
     {
-        private ConcurrentQueue<string> _tags = new ConcurrentQueue<string>();
-        private ConcurrentQueue<object> _fields= new ConcurrentQueue<object>();
+        private readonly ConcurrentQueue<string> _tags = new ConcurrentQueue<string>();
+        private readonly ConcurrentQueue<object> _fields= new ConcurrentQueue<object>();
         private object _content;
 
         public object Content
