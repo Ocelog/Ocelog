@@ -134,6 +134,20 @@ namespace Ocelog.Test
             Assert.Equal(blob.TargetSite.ToString(), dictionary["TargetSite"]);
         }
 
+        [Fact]
+        private void should_merge_unboxed_arrays()
+        {
+            var blob = new { Ids = new[] { 12 } };
+            var blob2 = new { Ids = new[] { 34 } };
+
+            var dictionary = ObjectMerging.Flatten(new[] { blob, blob2 });
+
+            Assert.True(dictionary.ContainsKey("Ids"));
+            Assert.Collection<object>((IEnumerable<object>)dictionary["Ids"],
+                id => Assert.Equal(12, id),
+                id => Assert.Equal(34, id));
+        }
+
         private Exception GetException()
         {
             try { throw null; }
