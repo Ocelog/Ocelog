@@ -76,18 +76,6 @@ namespace Ocelog
                 .Any(valueInterface => (typeof(IDictionary<,>).IsAssignableFrom(valueInterface.GetGenericTypeDefinition())));
         }
 
-        private static object SafeGetValue(object fields, System.Reflection.PropertyInfo prop)
-        {
-            try
-            {
-                return prop.GetValue(fields);
-            }
-            catch
-            {
-                return new Dictionary<string, object>() { { "OcelogWarning", "Exception thrown by invocation" } };
-            }
-        }
-
         private static Dictionary<string, object> BoxDictionaryValues(Type valueType, object fields)
         {
             var method = typeof(ObjectMerging).GetMethod("GenericBoxDictionaryValues", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
@@ -102,6 +90,39 @@ namespace Ocelog
             return dictionary.ToDictionary<KeyValuePair<string, T>, string, object>(pair => pair.Key, pair => pair.Value);
         }
 
+        private static bool IsCompatibleEnumerable(Type type)
+        {
+            return type.GetInterfaces()
+                .Where(valueInterface => valueInterface.IsGenericType)
+                .Any(valueInterface => (typeof(IEnumerable<>).IsAssignableFrom(valueInterface.GetGenericTypeDefinition())));
+        }
+
+        private static IEnumerable<object> BoxEnumerableValues(Type valueType, object fields)
+        {
+            var method = typeof(ObjectMerging).GetMethod("GenericBoxEnumerableValues", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var genericMethod = method.MakeGenericMethod(valueType);
+            return (IEnumerable<object>)genericMethod.Invoke(null, new[] { fields });
+        }
+
+        private static IEnumerable<object> GenericBoxEnumerableValues<T>(object fields)
+        {
+            var enumerable = (IEnumerable<T>)fields;
+
+            return enumerable.Cast<object>();
+        }
+
+        private static object SafeGetValue(object fields, System.Reflection.PropertyInfo prop)
+        {
+            try
+            {
+                return prop.GetValue(fields);
+            }
+            catch
+            {
+                return new Dictionary<string, object>() { { "OcelogWarning", "Exception thrown by invocation" } };
+            }
+        }
+
         private static object ToDictionaryOrObject(object fields, object[] stack)
         {
             if (IsSimpleType(fields))
@@ -113,8 +134,8 @@ namespace Ocelog
             if (fields.GetType().IsArray)
                 return ToList(((IEnumerable)fields).Cast<object>(), stack);
 
-            if (typeof(IEnumerable<object>).IsAssignableFrom(fields.GetType()))
-                return ToList((IEnumerable<object>)fields, stack);
+            if (!IsCompatibleDictionary(fields.GetType()) && IsCompatibleEnumerable(fields.GetType()))
+                return ToList(BoxEnumerableValues(fields.GetType().GetGenericArguments()[0], fields), stack);
 
             if (IsPredicate(fields))
                 return fields;

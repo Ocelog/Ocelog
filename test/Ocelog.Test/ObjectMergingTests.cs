@@ -148,6 +148,36 @@ namespace Ocelog.Test
                 id => Assert.Equal(34, id));
         }
 
+        [Fact]
+        private void should_merge_collections()
+        {
+            var blob = new { Ids = new[] { 12 }.ToList() };
+            var blob2 = new { Ids = new[] { 34 }.ToList() };
+
+            var dictionary = ObjectMerging.Flatten(new[] { blob, blob2 });
+
+            Assert.True(dictionary.ContainsKey("Ids"));
+            Assert.Collection<object>((IEnumerable<object>)dictionary["Ids"],
+                id => Assert.Equal(12, id),
+                id => Assert.Equal(34, id));
+        }
+
+        [Fact]
+        private void should_merge_collections_of_mixed_types()
+        {
+            var blob = new { Ids = new[] { 12 }.ToList() };
+            var blob2 = new { Ids = new[] { "34" }.ToList() };
+            var blob3 = new { Ids = new[] { true } };
+
+            var dictionary = ObjectMerging.Flatten(new object[] { blob, blob2, blob3 });
+
+            Assert.True(dictionary.ContainsKey("Ids"));
+            Assert.Collection<object>((IEnumerable<object>)dictionary["Ids"],
+                id => Assert.Equal(12, id),
+                id => Assert.Equal("34", id),
+                id => Assert.Equal(true, id));
+        }
+
         private Exception GetException()
         {
             try { throw null; }
