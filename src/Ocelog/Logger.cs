@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +6,7 @@ namespace Ocelog
 {
     public class Logger : IDisposable
     {
-        private Subject<LogEvent> _logEvents;
+        private readonly Subject<LogEvent> _logEvents;
 
         public Logger(Action<IObservable<LogEvent>> loggingPipelineFactory)
         {

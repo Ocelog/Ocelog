@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Ocelog.Test
@@ -79,7 +76,6 @@ namespace Ocelog.Test
 
             using (var requestLog = logger.StartRequestLog())
             {
-
                 requestLog.Add(new { Val = 1 });
                 requestLog.Add(new { Name = "Some name" });
             }
@@ -94,11 +90,6 @@ namespace Ocelog.Test
         private string GetCallerFilePath([CallerFilePath]string callerFilePath = "Shouldn't Get This")
         {
             return callerFilePath;
-        }
-
-        private int GetCallerLineNumber([CallerLineNumber]int callerLineNumber = -999)
-        {
-            return callerLineNumber;
         }
     }
 }

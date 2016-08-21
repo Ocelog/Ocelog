@@ -24,7 +24,5 @@ namespace Ocelog
         public IEnumerable<string> Tags { get; }
 
         public string Content { get; }
-
-
     }
 }

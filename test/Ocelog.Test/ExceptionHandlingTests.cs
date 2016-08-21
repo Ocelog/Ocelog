@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
-using System.Reactive.Linq;
 
 namespace Ocelog.Test
 {
@@ -13,7 +9,6 @@ namespace Ocelog.Test
         [Fact]
         public void should_throw_logging_exceptions_into_calling_code_by_default()
         {
-            var output = new List<LogEvent>();
             var exception = new Exception();
             var logger = new Logger(logEvents => logEvents
                 .Subscribe(log => { throw exception; })
@@ -44,7 +39,6 @@ namespace Ocelog.Test
         [Fact]
         public void should_allow_ignoring_exceptions()
         {
-            var output = new List<LogEvent>();
             var exception = new Exception();
             var logger = new Logger(logEvents => logEvents
                 .IgnoreLoggingErrors()

@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ocelog
 {
@@ -113,7 +111,7 @@ namespace Ocelog
                 return fields.ToString();
 
             if (fields.GetType().IsArray)
-                return ToList((object[])fields, stack);
+                return ToList(((IEnumerable)fields).Cast<object>(), stack);
 
             if (typeof(IEnumerable<object>).IsAssignableFrom(fields.GetType()))
                 return ToList((IEnumerable<object>)fields, stack);

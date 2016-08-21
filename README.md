@@ -171,3 +171,13 @@ This will log any exceptions thrown by the logging pipeline to the console. `log
             .Subscribe(allOutput);
     });
 
+## Contributions
+
+We encourage contributions and will review all pull requests and discuss them.
+
+When you send your pull request please ensure you do the following first.
+
+* Please sign the CLA for Ocelog at: [CLA](https://cla-assistant.io/Ocelog/Ocelog) 
+* Make sure you include new test cases and ensure all tests are passing.
+
+[![CLA assistant](https://cla-assistant.io/readme/badge/Ocelog/Ocelog)](https://cla-assistant.io/Ocelog/Ocelog)

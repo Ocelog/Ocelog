@@ -11,13 +11,13 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</description>
     <releaseNotes>Many changes and improvements.</releaseNotes>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2016</copyright>
     <tags>Logging .net Logstash Structured</tags>
     <dependencies>
       <dependency id="Rx-Core" version="2.2.5" />
       <dependency id="Rx-Interfaces" version="2.2.5" />
       <dependency id="Rx-Linq" version="2.2.5" />
-      <dependency id="Newtonsoft.Json" version="7.0.1" />
+      <dependency id="Newtonsoft.Json" version="6.0.8" />
     </dependencies>
   </metadata>
 </package>

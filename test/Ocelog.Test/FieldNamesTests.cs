@@ -18,7 +18,6 @@ namespace Ocelog.Test
         [InlineData("field_name", "field_name")]
         [InlineData("Field_name", "field_name")]
         [InlineData("FieldName_Goes here", "field_name_goes_here")]
-        //    [InlineData("hotelID", "hotel_id")]
         [InlineData("hotelId", "hotel_id")]
         public void should_convert_fieldnames_to_snakecase(string originalFieldName, string finalFieldName)
         {
@@ -98,7 +97,6 @@ namespace Ocelog.Test
         [InlineData("field_name", "FieldName")]
         [InlineData("Field_name", "FieldName")]
         [InlineData("FieldName_Goes here", "FieldNameGoesHere")]
-        //    [InlineData("hotelID", "hotelId")]
         [InlineData("hotelId", "HotelId")]
         public void should_convert_fieldnames_to_pascalcase(string originalFieldName, string finalFieldName)
         {
@@ -178,7 +176,6 @@ namespace Ocelog.Test
         [InlineData("field_name", "fieldName")]
         [InlineData("Field_name", "fieldName")]
         [InlineData("FieldName_Goes here", "fieldNameGoesHere")]
-        //    [InlineData("hotelID", "hotelId")]
         [InlineData("hotelId", "hotelId")]
         public void should_convert_fieldnames_to_camelcase(string originalFieldName, string finalFieldName)
         {
@@ -249,4 +246,3 @@ namespace Ocelog.Test
         }
     }
 }
-

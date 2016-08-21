@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ocelog.Transport.UDP
 {
@@ -16,7 +13,7 @@ namespace Ocelog.Transport.UDP
 
         internal class SendLogsToUdp : IObserver<FormattedLogEvent>
         {
-            private UdpClient _client;
+            private readonly UdpClient _client;
 
             public SendLogsToUdp(string host, int port)
             {
