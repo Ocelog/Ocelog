@@ -66,7 +66,7 @@ namespace Ocelog.Testing
             if (IsComparableWithEquals(expectedContent, actualContent))
                 return actualContent.Equals(expectedContent) ? Pass() : Fail($"Not equal ({path}) Expected: {expectedContent} but got {actualContent}");
 
-            if (actualContent is IEnumerable && expectedContent is IEnumerable)
+            if (actualContent is IEnumerable && expectedContent is IEnumerable && !(actualContent is Dictionary<string, object>))
                 return DidCollectionsMatch(actualContent, expectedContent, path);
 
             return DidPropertiesMatch(actualContent, expectedContent, path);
