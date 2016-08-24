@@ -233,7 +233,6 @@ namespace Ocelog.Testing.Test
         [Fact]
         public void should_allow_asserting_on_request_log()
         {
-
             var logSpy = new LoggingSpy();
             var requestLog = logSpy.Logger.StartRequestLog();
             var expectedContent = new { Some = "Content" };
@@ -243,6 +242,126 @@ namespace Ocelog.Testing.Test
             requestLog.Complete();
 
             logSpy.AssertDidInfo(expectedContent);
+        }
+
+        [Fact]
+        public void should_allow_asserting_on_unboxed_arrays()
+        {
+            var logSpy = new LoggingSpy();
+            var expectedContent = new { Some = new[] { 1, 2 } };
+
+            logSpy.Logger.Info(expectedContent);
+
+            logSpy.AssertDidInfo(expectedContent);
+        }
+
+        [Fact]
+        public void should_allow_asserting_on_unboxed_arrays_fail_due_to_order()
+        {
+            var logSpy = new LoggingSpy();
+            var actualContent = new { Some = new[] { 1, 2 } };
+            var expectedContent = new { Some = new[] { 2, 1 } };
+
+            logSpy.Logger.Info(actualContent);
+
+            Assert.Throws<LoggingAssertionFailed>(() =>
+            {
+                try
+                {
+                    logSpy.AssertDidInfo(expectedContent);
+                }
+                catch (LoggingAssertionFailed exception)
+                {
+                    Assert.Contains("Some", exception.Message);
+                    throw;
+                }
+            });
+        }
+
+        [Fact]
+        public void should_allow_asserting_on_unboxed_arrays_fail_due_to_different_values()
+        {
+            var logSpy = new LoggingSpy();
+            var actualContent = new { Some = new[] { 1, 2 } };
+            var expectedContent = new { Some = new[] { 1, 3 } };
+
+            logSpy.Logger.Info(actualContent);
+
+            Assert.Throws<LoggingAssertionFailed>(() =>
+            {
+                try
+                {
+                    logSpy.AssertDidInfo(expectedContent);
+                }
+                catch (LoggingAssertionFailed exception)
+                {
+                    Assert.Contains("Some[1]", exception.Message);
+                    throw;
+                }
+            });
+        }
+
+        [Fact]
+        public void should_state_name_of_not_matching_collections_failed_due_to_length()
+        {
+            var logSpy = new LoggingSpy();
+            var actualContent = new { Some = new[] { 1, 2 } };
+            var expectedContent = new { Some = new[] { 1, 2, 3 } };
+
+            logSpy.Logger.Info(actualContent);
+
+            Assert.Throws<LoggingAssertionFailed>(() =>
+            {
+                try
+                {
+                    logSpy.AssertDidInfo(expectedContent);
+                }
+                catch (LoggingAssertionFailed exception)
+                {
+                    Assert.Contains("Some", exception.Message);
+                    throw;
+                }
+            });
+        }
+
+        [Fact]
+        public void should_allow_asserting_on_unboxed_arrays_in_requestlog()
+        {
+            var logSpy = new LoggingSpy();
+            var requestLog = logSpy.Logger.StartRequestLog();
+            var expectedContent = new { Some = new[] { 1, 2 } };
+
+            requestLog.Add(expectedContent);
+
+            requestLog.Complete();
+
+            logSpy.AssertDidInfo(expectedContent);
+        }
+
+        [Fact]
+        public void should_allow_asserting_on_unboxed_arrays_fail_due_to_order_in_requestlog()
+        {
+            var logSpy = new LoggingSpy();
+            var requestLog = logSpy.Logger.StartRequestLog();
+            var actualContent = new { Some = new[] { 1, 2 } };
+            var expectedContent = new { Some = new[] { 2, 1 } };
+
+            requestLog.Add(actualContent);
+
+            requestLog.Complete();
+
+            Assert.Throws<LoggingAssertionFailed>(() =>
+            {
+                try
+                {
+                    logSpy.AssertDidInfo(expectedContent);
+                }
+                catch (LoggingAssertionFailed exception)
+                {
+                    Assert.Contains("Some", exception.Message);
+                    throw;
+                }
+            });
         }
     }
 }
