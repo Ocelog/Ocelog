@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -176,6 +177,27 @@ namespace Ocelog.Test
                 id => Assert.Equal(12, id),
                 id => Assert.Equal("34", id),
                 id => Assert.Equal(true, id));
+        }
+
+        [Fact]
+        private void should_merge_non_generic_collections()
+        {
+            var data1 = new Exception().Data;
+            data1.Clear();
+            data1.Add("blob", "thang");
+            var blob = new { Things = data1 };
+
+            var data2 = new Exception().Data;
+            data2.Clear();
+            data2.Add("blob", "thang2");
+            var blob2 = new { Things = data2 };
+
+            var dictionary = ObjectMerging.Flatten(new object[] { blob, blob2 });
+
+            Assert.True(dictionary.ContainsKey("Things"));
+            Assert.Collection<object>((IEnumerable<object>)dictionary["Things"],
+                id => Assert.Equal(new DictionaryEntry("blob", "thang"), id),
+                id => Assert.Equal(new DictionaryEntry("blob", "thang2"), id));
         }
 
         private Exception GetException()

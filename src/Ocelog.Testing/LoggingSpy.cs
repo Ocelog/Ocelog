@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,7 +66,25 @@ namespace Ocelog.Testing
             if (IsComparableWithEquals(expectedContent, actualContent))
                 return actualContent.Equals(expectedContent) ? Pass() : Fail($"Not equal ({path}) Expected: {expectedContent} but got {actualContent}");
 
+            if (actualContent is IEnumerable && expectedContent is IEnumerable)
+                return DidCollectionsMatch(actualContent, expectedContent, path);
+
             return DidPropertiesMatch(actualContent, expectedContent, path);
+        }
+
+        private Tuple<bool, string> DidCollectionsMatch(object actualContent, object expectedContent, string path)
+        {
+            var actualCollection = ((IEnumerable)actualContent).Cast<object>();
+            var expectedCollection = ((IEnumerable)expectedContent).Cast<object>();
+
+            if (actualCollection.Count() != expectedCollection.Count())
+                return Fail($"Collections are different lengths ({path})");
+
+            var zippedCollections = actualCollection.Zip(expectedCollection, (actual, expected) => new { actual, expected });
+
+            return zippedCollections.Zip(Enumerable.Range(0, zippedCollections.Count()), (pair, index) => DidMatch(pair.actual, pair.expected, path + $"[{index}]"))
+                .FirstOrDefault(match => !match.Item1)
+                ?? Pass();
         }
 
         private Tuple<bool, string> DidPropertiesMatch(object actualContent, object expectedContent, string path)
