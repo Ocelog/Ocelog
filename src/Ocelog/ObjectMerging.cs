@@ -131,7 +131,7 @@ namespace Ocelog
             if (IsInSpecialCaseList(fields))
                 return fields.ToString();
 
-            if (fields.GetType().IsArray)
+            if (fields.GetType().IsArray || (fields is IEnumerable && !IsCompatibleEnumerable(fields.GetType())))
                 return ToList(((IEnumerable)fields).Cast<object>(), stack);
 
             if (!IsCompatibleDictionary(fields.GetType()) && IsCompatibleEnumerable(fields.GetType()))
