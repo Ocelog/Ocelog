@@ -272,7 +272,7 @@ namespace Ocelog.Testing.Test
                 }
                 catch (LoggingAssertionFailed exception)
                 {
-                    Assert.Contains("Some", exception.Message);
+                    Assert.Contains("Some[0]", exception.Message);
                     throw;
                 }
             });
