@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Ocelog.Testing.Test
@@ -362,6 +363,19 @@ namespace Ocelog.Testing.Test
                     throw;
                 }
             });
+        }
+
+        [Fact]
+        public void should_not_treat_dictionaries_as_collections()
+        {
+            var logSpy = new LoggingSpy();
+            var requestLog = logSpy.Logger.StartRequestLog();
+
+            requestLog.Add(new Dictionary<string, object> { { "Blah", 1 } });
+
+            requestLog.Complete();
+
+            logSpy.AssertDidInfo(new Dictionary<string, object>() { { "Blah", new Predicate<int>(num => num >= 0) } });
         }
     }
 }
