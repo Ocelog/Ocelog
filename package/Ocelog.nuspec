@@ -10,7 +10,7 @@
     <iconUrl>https://raw.githubusercontent.com/Ocelog/Ocelog/master/Ocelog_icon.jpg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</description>
-    <releaseNotes>Fixed merging of non-generic collections. (Bug fix from previous release)</releaseNotes>
+    <releaseNotes>Upgraded to Reactive Extensions v3</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>Logging .net Logstash Structured</tags>
     <dependencies>
