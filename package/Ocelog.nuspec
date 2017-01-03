@@ -14,9 +14,9 @@
     <copyright>Copyright 2016</copyright>
     <tags>Logging .net Logstash Structured</tags>
     <dependencies>
-      <dependency id="System.Reactive.Core" version="3.3.1" />
-      <dependency id="System.Reactive.Interfaces" version="3.3.1" />
-      <dependency id="System.Reactive.Linq" version="3.3.1" />
+      <dependency id="System.Reactive.Core" version="3.1.1" />
+      <dependency id="System.Reactive.Interfaces" version="3.1.1" />
+      <dependency id="System.Reactive.Linq" version="3.1.1" />
       <dependency id="Newtonsoft.Json" version="6.0.8" />
     </dependencies>
   </metadata>
