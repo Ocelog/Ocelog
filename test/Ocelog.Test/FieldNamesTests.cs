@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using System.Reactive.Linq;
 
 namespace Ocelog.Test
 {
+    using System;
+
     public class FieldNamesTests
     {
         [Theory]
