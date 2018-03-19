@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Ocelog
 {
@@ -12,7 +13,7 @@ namespace Ocelog
             if (!allFields.Any())
                 return new Dictionary<string, object>();
 
-            return (Dictionary<string, object>)allFields
+            return allFields
                 .Select(ToDictionary)
                 .Aggregate((first, second) => Merge(second, first));
         }
@@ -56,7 +57,7 @@ namespace Ocelog
 
             var type = fields.GetType();
             if (IsCompatibleDictionary(type))
-                return BoxDictionaryValues(type.GetGenericArguments()[1], fields);
+                return BoxDictionaryValues(type.GenericTypeArguments[1], fields);
 
             return type.GetProperties()
                 .Where(prop => !IsDelegateType(prop.PropertyType))
@@ -72,13 +73,13 @@ namespace Ocelog
         {
             return type.GetInterfaces()
                 .Where(valueInterface => valueInterface.IsGenericType)
-                .Where(valueInterface => valueInterface.GetGenericArguments().First() == typeof(string))
+                .Where(valueInterface => valueInterface.GenericTypeArguments.First() == typeof(string))
                 .Any(valueInterface => (typeof(IDictionary<,>).IsAssignableFrom(valueInterface.GetGenericTypeDefinition())));
         }
 
         private static Dictionary<string, object> BoxDictionaryValues(Type valueType, object fields)
         {
-            var method = typeof(ObjectMerging).GetMethod("GenericBoxDictionaryValues", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var method = typeof(ObjectMerging).GetMethod("GenericBoxDictionaryValues", BindingFlags.Static | BindingFlags.NonPublic);
             var genericMethod = method.MakeGenericMethod(valueType);
             return (Dictionary<string, object>)genericMethod.Invoke(null, new[] { fields });
         }
@@ -99,7 +100,7 @@ namespace Ocelog
 
         private static IEnumerable<object> BoxEnumerableValues(Type valueType, object fields)
         {
-            var method = typeof(ObjectMerging).GetMethod("GenericBoxEnumerableValues", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var method = typeof(ObjectMerging).GetMethod("GenericBoxEnumerableValues", BindingFlags.Static | BindingFlags.NonPublic);
             var genericMethod = method.MakeGenericMethod(valueType);
             return (IEnumerable<object>)genericMethod.Invoke(null, new[] { fields });
         }
@@ -135,7 +136,7 @@ namespace Ocelog
                 return ToList(((IEnumerable)fields).Cast<object>(), stack);
 
             if (!IsCompatibleDictionary(fields.GetType()) && IsCompatibleEnumerable(fields.GetType()))
-                return ToList(BoxEnumerableValues(fields.GetType().GetGenericArguments()[0], fields), stack);
+                return ToList(BoxEnumerableValues(fields.GetType().GenericTypeArguments[0], fields), stack);
 
             if (IsPredicate(fields))
                 return fields;
@@ -161,7 +162,7 @@ namespace Ocelog
         {
             var type = fields.GetType();
 
-            return typeof(System.Reflection.MethodBase).IsAssignableFrom(type);
+            return typeof(MethodBase).IsAssignableFrom(type);
         }
 
         private static bool IsPredicate(object content)
@@ -170,7 +171,7 @@ namespace Ocelog
 
             return type.IsGenericType
                    && type.GetGenericTypeDefinition() == typeof(Predicate<>)
-                   && type.GetGenericArguments().Length == 1;
+                   && type.GenericTypeArguments.Length == 1;
         }
 
         private static bool IsDelegateType(Type type)
