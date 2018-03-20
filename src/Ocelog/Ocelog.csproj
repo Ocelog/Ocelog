@@ -1,21 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <Product>Ocelog</Product> 
     <PackageId>Ocelog</PackageId>
-    <Description>A simple library for logging</Description>
-    <Product>Ocelog</Product>
+    <Version>2.1.0</Version>
+    <Description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</Description>
+    <PackageTags>logging log .net logstash structured reactive</PackageTags>
     <Company />
-    <Authors />
-    <Copyright>Copyright © 2015</Copyright>
+    <Authors>Andy Lowry</Authors>    
+    <Copyright>Copyright © 2018</Copyright>
+    <PackageProjectUrl>https://github.com/Ocelog/Ocelog</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ocelog/Ocelog/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Ocelog/Ocelog/master/Ocelog_icon.jpg</PackageIconUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Linq" Version="4.3.0" />
     <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
     <PackageReference Include="System.Reactive.Interfaces" Version="3.1.1" />
     <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
