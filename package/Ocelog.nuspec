@@ -11,13 +11,21 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</description>
     <releaseNotes>Upgraded to Reactive Extensions v3</releaseNotes>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>Logging .net Logstash Structured</tags>
     <dependencies>
-      <dependency id="System.Reactive.Core" version="3.1.1" />
-      <dependency id="System.Reactive.Interfaces" version="3.1.1" />
-      <dependency id="System.Reactive.Linq" version="3.1.1" />
-      <dependency id="Newtonsoft.Json" version="6.0.8" />
+		<group targetFramework="netstandard2.0">
+		  <dependency id="System.Reactive.Core" version="3.1.1" />
+		  <dependency id="System.Reactive.Interfaces" version="3.1.1" />
+		  <dependency id="System.Reactive.Linq" version="3.1.1" />
+		  <dependency id="Newtonsoft.Json" version="6.0.8" />
+		</group>
+		<group targetFramework="net45">
+		  <dependency id="System.Reactive.Core" version="3.1.1" />
+		  <dependency id="System.Reactive.Interfaces" version="3.1.1" />
+		  <dependency id="System.Reactive.Linq" version="3.1.1" />
+		  <dependency id="Newtonsoft.Json" version="6.0.8" />
+		</group>
     </dependencies>
   </metadata>
 </package>
