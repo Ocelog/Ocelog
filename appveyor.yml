@@ -8,7 +8,7 @@ build_script:
   - dotnet build -c Debug
   - cd package && Package.bat
 test_script:
-  - dotnet test -c Debug
+  - ps: .\runTests.ps1
 artifacts:
   - path: package\*.nupkg
 
