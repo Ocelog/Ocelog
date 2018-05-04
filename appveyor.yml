@@ -1,0 +1,14 @@
+image: Visual Studio 2017
+clone_depth: 1
+init:
+  - git config --global core.autocrlf input
+before_build:
+  - dotnet --version
+build_script:
+  - dotnet build -c Debug
+  - cd package && Package.bat
+test_script:
+  - ps: .\runTests.ps1
+artifacts:
+  - path: package\*.nupkg
+
