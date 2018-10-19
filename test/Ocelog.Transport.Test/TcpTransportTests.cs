@@ -2,47 +2,59 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Xunit;
 
 namespace Ocelog.Transport.Test
 {
     public class TcpTransportTests
     {
-        int _port;
-        Task<string> _receiving;
+        ISubject<int> _ports;
+        IObservable<TcpClient> _conns;
+        IObservable<string> _lines;
 
         public TcpTransportTests()
         {
-            _port = new Random().Next(10000, 20000);
-            _receiving = Receive(port: _port, timeout: 3000);      
+            _ports = new ReplaySubject<int>();
+            _conns = _ports.ReceiveConnections();
+            _lines = _conns.ReadLines();
         }
         
         [Fact]
         public async void should_send_content_to_tcp_endpoint()
         {
-            TcpTransport.Send("127.0.0.1", _port)
+            var port = RandomPort();
+            _ports.OnNext(port);
+            
+            TcpTransport.Send("127.0.0.1", port)
                 .OnNext(new FormattedLogEvent { Content = "This is my content" });
 
-            var received = await _receiving;
+            var received = await _lines.FirstAsync();
             Assert.Equal("This is my content", received);
         }
-        
-        async Task<string> Receive(int port, int timeout)
+
+        [Fact]
+        public async void Reconnects_when_necessary()
         {
-            var listener = new TcpListener(IPAddress.Any, port);
-            listener.Start();
+            var port = RandomPort();
+            _ports.OnNext(port);
 
-            var connecting = listener.AcceptTcpClientAsync();
+            TcpTransport.Send("127.0.0.1", port)
+                .OnNext(new FormattedLogEvent { Content = "This is my content" });
 
-            await Task.WhenAny(Task.Delay(timeout), connecting);
-            if(!connecting.IsCompleted) throw new TimeoutException("No connection received!");
+            _ports.OnNext(port); //reestablish connection (needs to trash existing conn)
 
-            var client = await connecting;
-            var stream = client.GetStream();
+            TcpTransport.Send("127.0.0.1", port)
+                .OnNext(new FormattedLogEvent { Content = "This is my content" });
 
-            var reader = new StreamReader(stream);
-            return await reader.ReadLineAsync();
+            var received = await _lines.ToArray().SingleAsync();
+            Assert.Equal("This is my content", received[0]);
+            Assert.Equal("This is my content", received[1]);
         }
+
+        static int RandomPort()
+            => new Random().Next(10000, 20000);
+
     }        
 }
