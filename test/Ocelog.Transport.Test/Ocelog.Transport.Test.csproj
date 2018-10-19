@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Ocelog.Transport.UDP\Ocelog.Transport.UDP.csproj" />
+    <ProjectReference Include="..\..\src\Ocelog.Transport\Ocelog.Transport.csproj" />
     <ProjectReference Include="..\..\src\Ocelog\Ocelog.csproj" />
   </ItemGroup>
 

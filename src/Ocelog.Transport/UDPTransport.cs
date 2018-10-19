@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 
-namespace Ocelog.Transport.UDP
+namespace Ocelog.Transport
 {
     public static class UDPTransport
     {
