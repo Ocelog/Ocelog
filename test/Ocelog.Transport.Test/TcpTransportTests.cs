@@ -10,7 +10,7 @@ namespace Ocelog.Transport.Test
     {
         int _port;
         IObserver<FormattedLogEvent> _sender;
-
+        
         public TcpTransportTests()
         {
             _port = RandomPort();

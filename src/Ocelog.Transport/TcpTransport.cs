@@ -1,97 +1,84 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace Ocelog.Transport
 {
-    public static class TcpTransport
+    public class TcpTransport : IObserver<FormattedLogEvent>
     {
-        public static IObserver<FormattedLogEvent> Send(string host, int port)
-            => new Sender(host, port);
+        readonly string _host;
+        readonly int _port;
+        
+        IPropagatorBlock<string, string> _bufferBlock;
+        ITargetBlock<string> _senderBlock;
 
-        class Sender : IObserver<FormattedLogEvent>
+        private TcpTransport(string host, int port)
         {
-            readonly string _host;
-            readonly int _port;
+            _host = host;
+            _port = port;
 
-            IPropagatorBlock<string, string> _bufferBlock;
-            ITargetBlock<string> _senderBlock;
+            _bufferBlock = new BufferBlock<string>();
+            _senderBlock = CreateSenderBlock();
+            _bufferBlock.LinkTo(_senderBlock);
+        }
 
-            public Sender(string host, int port)
+        public static IObserver<FormattedLogEvent> Send(string host, int port)
+            => new TcpTransport(host, port);
+
+        ITargetBlock<string> CreateSenderBlock()
+        {
+            TcpClient tcp;
+            StreamWriter writer;
+            var options = new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1 };
+
+            Setup();
+
+            return new ActionBlock<string>(Handle, options);
+                
+            void Setup()
             {
-                _host = host;
-                _port = port;
-
-                _bufferBlock = new BufferBlock<string>();
-                _senderBlock = CreateSenderBlock();
-                _bufferBlock.LinkTo(_senderBlock);
+                tcp = new TcpClient(_host, _port);
+                writer = new StreamWriter(tcp.GetStream());
             }
-            
-            ITargetBlock<string> CreateSenderBlock()
+                
+            async Task Handle(string body)
             {
-                TcpClient tcp;
-                StreamWriter writer;
-
-                Setup();
-
-                var senderBlock = new ActionBlock<string>(Handle, new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1 });
-                
-                return senderBlock;
-                
-                void Setup()
+                try
                 {
-                    tcp = new TcpClient(_host, _port);
-                    writer = new StreamWriter(tcp.GetStream());
+                    await writer.WriteLineAsync(body);
+                    await writer.FlushAsync();
                 }
-                
-                async Task Handle(string body)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        await writer.WriteLineAsync(body);
-                        await writer.FlushAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        await Recover(ex, () => Handle(body));
-                    }
-                }
-
-                Task Recover(Exception exception, Func<Task> retry)
-                {
-                    switch (exception)
-                    {
-                        case IOException ex:
-                            Setup();
-                            return retry();
-
-                        case Exception ex when ex.InnerException != null:
-                            return Recover(ex.InnerException, retry);
-
-                        default:
-                            throw new Exception("Unrecoverable error", exception);
-                    }
+                    await Recover(ex, () => Handle(body));
                 }
             }
-            
-            public void OnCompleted()
-            {
-                _bufferBlock.Complete();
-            }
 
-            public void OnError(Exception error)
+            Task Recover(Exception exception, Func<Task> retry)
             {
-                _bufferBlock.Complete();
-            }
+                switch (exception)
+                {
+                    case IOException ex:
+                        Setup();
+                        return retry();
 
-            public void OnNext(FormattedLogEvent value)
-            {
-                _bufferBlock.Post(value.Content);
+                    case Exception ex when ex.InnerException != null:
+                        return Recover(ex.InnerException, retry);
+
+                    default:
+                        throw new Exception("Unrecoverable error", exception);
+                }
             }
         }
+            
+        void IObserver<FormattedLogEvent>.OnCompleted()
+            => _bufferBlock.Complete();
+
+        void IObserver<FormattedLogEvent>.OnError(Exception error) { }
+
+        void IObserver<FormattedLogEvent>.OnNext(FormattedLogEvent value)
+            => _bufferBlock.Post(value.Content);
     }
-    
 }
