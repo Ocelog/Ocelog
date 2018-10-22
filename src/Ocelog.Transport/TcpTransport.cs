@@ -35,7 +35,9 @@ namespace Ocelog.Transport
 
             Setup();
 
-            return new ActionBlock<string>(Handle, options);
+            var block = new ActionBlock<string>(Handle, options);
+            block.Completion.ContinueWith(t => CleanUp());
+            return block;
                 
             void Setup()
             {
@@ -55,12 +57,13 @@ namespace Ocelog.Transport
                     await Recover(ex, () => Handle(body));
                 }
             }
-
+            
             Task Recover(Exception exception, Func<Task> retry)
             {
                 switch (exception)
                 {
                     case IOException ex:
+                        CleanUp();
                         Setup();
                         return retry();
 
@@ -70,6 +73,15 @@ namespace Ocelog.Transport
                     default:
                         throw new Exception("Unrecoverable error", exception);
                 }
+            }
+
+            void CleanUp()
+            {
+                try { writer?.Close(); }
+                catch(Exception) { }
+ 
+                try { tcp?.Close(); }
+                catch(Exception) { }                
             }
         }
             
