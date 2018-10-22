@@ -17,7 +17,7 @@ namespace Ocelog.Transport.Test
         }
 
         [Fact]
-        public async void should_send_content_to_tcp_endpoint()
+        public async void Sends_content_to_tcp_endpoint()
         {
             using (var receiver = await TcpReceiver.Receive(_port))
             {
@@ -54,18 +54,9 @@ namespace Ocelog.Transport.Test
         }
 
         [Fact]
-        public async void Copes_with_connection_not_being_immediately_available()
+        public void Fails_fast_if_no_connection_on_start()
         {
-            _sender = CreateSender();
-            await Task.Delay(200);
-
-            using (var receiver = await TcpReceiver.Receive(_port))
-            {
-                _sender.OnNext(new FormattedLogEvent { Content = "Hello" });
-                await Task.Delay(50);
-
-                Assert.Equal("Hello", receiver.Lines.Single());
-            }
+            Assert.ThrowsAny<Exception>(() => CreateSender());            
         }
 
         IObserver<FormattedLogEvent> CreateSender()
