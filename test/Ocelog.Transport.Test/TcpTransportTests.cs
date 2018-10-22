@@ -1,60 +1,76 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Ocelog.Transport.Test
 {
     public class TcpTransportTests
     {
-        ISubject<int> _ports;
-        IObservable<TcpClient> _conns;
-        IObservable<string> _lines;
+        int _port;
+        IObserver<FormattedLogEvent> _sender;
 
         public TcpTransportTests()
         {
-            _ports = new ReplaySubject<int>();
-            _conns = _ports.ReceiveConnections();
-            _lines = _conns.ReadLines();
+            _port = 12345; // RandomPort();
         }
-        
+
         [Fact]
         public async void should_send_content_to_tcp_endpoint()
         {
-            var port = RandomPort();
-            _ports.OnNext(port);
-            
-            TcpTransport.Send("127.0.0.1", port)
-                .OnNext(new FormattedLogEvent { Content = "This is my content" });
-
-            var received = await _lines.FirstAsync();
-            Assert.Equal("This is my content", received);
+            using (var receiver = await TcpReceiver.Receive(_port))
+            {
+                _sender = CreateSender();
+                _sender.OnNext(new FormattedLogEvent { Content = "Hello1" });
+                await Task.Delay(100);
+                
+                Assert.Equal("Hello1", receiver.Lines.Single());
+            }
         }
 
         [Fact]
-        public async void Reconnects_when_necessary()
+        public async void Copes_with_connection_not_being_immediately_available()
         {
-            var port = RandomPort();
-            _ports.OnNext(port);
-
-            TcpTransport.Send("127.0.0.1", port)
-                .OnNext(new FormattedLogEvent { Content = "This is my content" });
-
-            _ports.OnNext(port); //reestablish connection (needs to trash existing conn)
-
-            TcpTransport.Send("127.0.0.1", port)
-                .OnNext(new FormattedLogEvent { Content = "This is my content" });
-
-            var received = await _lines.ToArray().SingleAsync();
-            Assert.Equal("This is my content", received[0]);
-            Assert.Equal("This is my content", received[1]);
+            //...
         }
+
+        [Fact]
+        public async void Reconnects_when_connection_closes()
+        {
+            using (var receiver = await TcpReceiver.Receive(_port))
+            {
+                _sender = CreateSender();
+                _sender.OnNext(new FormattedLogEvent { Content = "Hello1" });
+                await Task.Delay(50);
+
+                Assert.Equal("Hello1", receiver.Lines.Single());
+
+                await receiver.ResetSocket();
+            }
+
+            await Task.Delay(100);
+
+            using (var receiver = await TcpReceiver.Receive(_port))
+            {
+                _sender.OnNext(new FormattedLogEvent { Content = "Hello2" });
+                await Task.Delay(50);
+
+                Assert.Equal("Hello2", receiver.Lines.Single());
+            }
+        }
+
+        IObserver<FormattedLogEvent> CreateSender()
+            => TcpTransport.Send("127.0.0.1", _port);
 
         static int RandomPort()
             => new Random().Next(10000, 20000);
-
+        
     }        
 }
