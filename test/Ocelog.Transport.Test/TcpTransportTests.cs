@@ -13,7 +13,7 @@ namespace Ocelog.Transport.Test
 
         public TcpTransportTests()
         {
-            _port = 12345; // RandomPort();
+            _port = RandomPort();
         }
 
         [Fact]
