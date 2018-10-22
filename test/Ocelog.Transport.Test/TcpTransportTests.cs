@@ -42,13 +42,12 @@ namespace Ocelog.Transport.Test
 
                 await receiver.ResetSocket();
             }
-
-            await Task.Delay(100);
-
+            
             using (var receiver = await TcpReceiver.Receive(_port))
             {
                 _sender.OnNext(new FormattedLogEvent { Content = "Hello2" });
-                await Task.Delay(50);
+                
+                await Task.Delay(1500); //enough time for sender to retry
                 
                 Assert.Equal("Hello2", receiver.Lines.Single());
             }
