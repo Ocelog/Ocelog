@@ -53,10 +53,19 @@ namespace Ocelog.Transport.Test
             }
         }
 
-        [Fact(Skip = "Not impl")]
+        [Fact]
         public async void Copes_with_connection_not_being_immediately_available()
         {
-            //...
+            _sender = CreateSender();
+            await Task.Delay(200);
+
+            using (var receiver = await TcpReceiver.Receive(_port))
+            {
+                _sender.OnNext(new FormattedLogEvent { Content = "Hello" });
+                await Task.Delay(50);
+
+                Assert.Equal("Hello", receiver.Lines.Single());
+            }
         }
 
         IObserver<FormattedLogEvent> CreateSender()
