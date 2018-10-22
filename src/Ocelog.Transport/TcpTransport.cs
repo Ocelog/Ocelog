@@ -31,6 +31,7 @@ namespace Ocelog.Transport
         {
             TcpClient tcp;
             StreamWriter writer;
+            var delay = (1000D, 1000D);
             var options = new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1 };
 
             Setup();
@@ -51,13 +52,15 @@ namespace Ocelog.Transport
                 {
                     await writer.WriteLineAsync(body);
                     await writer.FlushAsync();
+                    ResetDelay();
                 }
                 catch (Exception ex)
                 {
+                    await Delay();
                     await Recover(ex, () => Handle(body));
                 }
             }
-            
+
             Task Recover(Exception exception, Func<Task> retry)
             {
                 switch (exception)
@@ -73,6 +76,18 @@ namespace Ocelog.Transport
                     default:
                         throw new Exception("Unrecoverable error", exception);
                 }
+            }
+
+            Task Delay()
+            {
+                var (orig, next) = delay;
+                delay = (orig, next * 1.3);
+                return Task.Delay((int)next);
+            }
+
+            void ResetDelay() {
+                var (orig, next) = delay;
+                delay = (orig, orig);
             }
 
             void CleanUp()
