@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,29 @@ namespace Ocelog.Transport.Test
             Assert.ThrowsAny<Exception>(() => CreateSender());            
         }
 
+        [Fact]
+        public async Task Copes_under_parallel_load()
+        {
+            using (var receiver = await TcpReceiver.Receive(_port))
+            {
+                _sender = CreateSender();
+
+                var messages = Enumerable.Range(0, 5000)
+                                .Select(i => i.ToString())
+                                .ToArray();
+
+                Parallel.ForEach(messages, m =>
+                {
+                    _sender.OnNext(new FormattedLogEvent { Content = m });
+                });
+                                
+                await Task.Delay(2000);
+
+                var received = new HashSet<string>(receiver.Lines);
+                Assert.All(messages, m => received.Contains(m));
+            }
+        }
+        
         IObserver<FormattedLogEvent> CreateSender()
             => TcpTransport.Send("127.0.0.1", _port);
 
