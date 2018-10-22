@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,12 +30,6 @@ namespace Ocelog.Transport.Test
         }
 
         [Fact]
-        public async void Copes_with_connection_not_being_immediately_available()
-        {
-            //...
-        }
-
-        [Fact]
         public async void Reconnects_when_connection_closes()
         {
             using (var receiver = await TcpReceiver.Receive(_port))
@@ -61,9 +49,15 @@ namespace Ocelog.Transport.Test
             {
                 _sender.OnNext(new FormattedLogEvent { Content = "Hello2" });
                 await Task.Delay(50);
-
+                
                 Assert.Equal("Hello2", receiver.Lines.Single());
             }
+        }
+
+        [Fact(Skip = "Not impl")]
+        public async void Copes_with_connection_not_being_immediately_available()
+        {
+            //...
         }
 
         IObserver<FormattedLogEvent> CreateSender()
