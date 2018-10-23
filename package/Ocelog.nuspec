@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Ocelog</id>
-    <Version>2.3.0</Version>
+    <version>2.3.0</version>
     <authors>Andy Lowry et al</authors>
     <licenseUrl>https://github.com/Ocelog/Ocelog/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Ocelog/Ocelog</projectUrl>
