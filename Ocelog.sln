@@ -11,13 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{905B33F6-43B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F68118B9-0251-41F7-BF05-627970A20FAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Transport.UDP.Test", "test\Ocelog.Transport.UDP.Test\Ocelog.Transport.UDP.Test.csproj", "{E47E1E65-3327-448C-B895-B514405FC65A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Transport.Test", "test\Ocelog.Transport.Test\Ocelog.Transport.Test.csproj", "{E47E1E65-3327-448C-B895-B514405FC65A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelog.Testing.Test", "test\Ocelog.Testing.Test\Ocelog.Testing.Test.csproj", "{B0DB94C0-03C7-433A-8BFF-A135175B2746}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelog", "src\Ocelog\Ocelog.csproj", "{79B941D4-8B91-467B-B9FD-3374413FF9D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelog.Transport.UDP", "src\Ocelog.Transport.UDP\Ocelog.Transport.UDP.csproj", "{D9E79568-3683-4C8C-B7B9-B9C4BEA0EB44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelog.Transport", "src\Ocelog.Transport\Ocelog.Transport.csproj", "{D9E79568-3683-4C8C-B7B9-B9C4BEA0EB44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelog.Testing", "src\Ocelog.Testing\Ocelog.Testing.csproj", "{1864EB30-09E4-43E3-BEFE-C0867150F41D}"
 EndProject

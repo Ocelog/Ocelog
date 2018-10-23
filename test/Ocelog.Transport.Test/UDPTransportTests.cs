@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using Xunit;
 
-namespace Ocelog.Transport.UDP.Test
+namespace Ocelog.Transport.Test
 {
     public class UDPTransportTests
     {
