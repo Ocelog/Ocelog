@@ -2,15 +2,14 @@
 <package >
   <metadata>
     <id>Ocelog</id>
-    <version>2.1.17</version>
-    <authors>Andy Lowry</authors>
-    <owners>Andy Lowry</owners>
+    <version>2.3.0</version>
+    <authors>Andy Lowry et al</authors>
     <licenseUrl>https://github.com/Ocelog/Ocelog/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Ocelog/Ocelog</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/Ocelog/Ocelog/master/Ocelog_icon.jpg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</description>
-    <releaseNotes>Now supports .NET Standard 2.0</releaseNotes>
+    <releaseNotes>Now supports .NET Standard 2.0, and sending with TCP</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Logging .net Logstash Structured</tags>
     <dependencies>
@@ -18,12 +17,16 @@
 		  <dependency id="System.Reactive.Core" version="3.1.1" />
 		  <dependency id="System.Reactive.Interfaces" version="3.1.1" />
 		  <dependency id="System.Reactive.Linq" version="3.1.1" />
+      <dependency id="System.Threading.Tasks.Dataflow" Version="4.9.0" />
+      <dependency id="System.ValueTuple" Version="4.5.0" />
 		  <dependency id="Newtonsoft.Json" version="6.0.8" />
 		</group>
 		<group targetFramework="net45">
 		  <dependency id="System.Reactive.Core" version="3.1.1" />
 		  <dependency id="System.Reactive.Interfaces" version="3.1.1" />
 		  <dependency id="System.Reactive.Linq" version="3.1.1" />
+      <dependency id="System.Threading.Tasks.Dataflow" Version="4.9.0" />
+      <dependency id="System.ValueTuple" Version="4.5.0" />
 		  <dependency id="Newtonsoft.Json" version="6.0.8" />
 		</group>
     </dependencies>
