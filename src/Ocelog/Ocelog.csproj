@@ -2,18 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <Product>Ocelog</Product> 
-    <PackageId>Ocelog</PackageId>
-    <Version>2.2.0</Version>
-    <Description>Ocelog is a logging library designed to make Structured logging of objects (not messages) easy</Description>
-    <PackageTags>logging log .net logstash structured reactive</PackageTags>
-    <Company />
-    <Authors>Andy Lowry</Authors>    
-    <Copyright>Copyright © 2018</Copyright>
-    <PackageProjectUrl>https://github.com/Ocelog/Ocelog</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/Ocelog/Ocelog/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/Ocelog/Ocelog/master/Ocelog_icon.jpg</PackageIconUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>    
   </PropertyGroup>
 
   <ItemGroup>
