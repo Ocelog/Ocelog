@@ -6,9 +6,10 @@ before_build:
   - dotnet --version
 build_script:
   - dotnet build -c Debug
-  - cd package && Package.bat %appveyor_build_number%
 test_script:
   - ps: .\runTests.ps1
+after_test:
+- cd package && Package.bat %appveyor_build_number%
 artifacts:
   - path: package\*.nupkg  
 deploy:
