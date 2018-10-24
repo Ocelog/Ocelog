@@ -1,3 +1,6 @@
+echo off
+set buildNumber=%1
+
 mkdir lib
 mkdir lib\netstandard2.0
 mkdir lib\net45
@@ -29,4 +32,4 @@ copy ..\src\Ocelog.Formatting.Logstash\bin\Debug\net45\Ocelog.Formatting.Logstas
 copy ..\src\Ocelog.Transport\bin\Debug\net45\Ocelog.Transport.pdb lib\net45
 copy ..\src\Ocelog.Testing\bin\Debug\net45\Ocelog.Testing.pdb lib\net45
 
-nuget pack -Symbols
+nuget pack -Symbols -Properties "buildNumber=%buildNumber%"
