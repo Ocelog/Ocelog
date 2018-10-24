@@ -17,16 +17,16 @@
 		  <dependency id="System.Reactive.Core" version="3.1.1" />
 		  <dependency id="System.Reactive.Interfaces" version="3.1.1" />
 		  <dependency id="System.Reactive.Linq" version="3.1.1" />
-      <dependency id="System.Threading.Tasks.Dataflow" Version="4.9.0" />
-      <dependency id="System.ValueTuple" Version="4.5.0" />
+      <dependency id="System.Threading.Tasks.Dataflow" version="4.9.0" />
+      <dependency id="System.ValueTuple" version="4.5.0" />
 		  <dependency id="Newtonsoft.Json" version="6.0.8" />
 		</group>
 		<group targetFramework="net45">
 		  <dependency id="System.Reactive.Core" version="3.1.1" />
 		  <dependency id="System.Reactive.Interfaces" version="3.1.1" />
 		  <dependency id="System.Reactive.Linq" version="3.1.1" />
-      <dependency id="System.Threading.Tasks.Dataflow" Version="4.9.0" />
-      <dependency id="System.ValueTuple" Version="4.5.0" />
+      <dependency id="System.Threading.Tasks.Dataflow" version="4.9.0" />
+      <dependency id="System.ValueTuple" version="4.5.0" />
 		  <dependency id="Newtonsoft.Json" version="6.0.8" />
 		</group>
     </dependencies>
